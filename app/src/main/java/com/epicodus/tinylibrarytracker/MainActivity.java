@@ -13,7 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    @Bind(R.id.signUpButton) Button mSignUpButton;
+    @Bind(R.id.signInButton) Button mSignInButton;
     @Bind(R.id.searchButton) Button mSearchButton;
     @Bind(R.id.favoritesButton) Button mFavoritesButton;
     @Bind(R.id.mainImage) ImageView mMainImage;
@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mSignUpButton.setOnClickListener(this);
-        mSearchButton.setOnClickListener(this);
-        mFavoritesButton.setOnClickListener(this);
+        mSignInButton.setOnClickListener(this);
+        mSearchButton.setVisibility(View.INVISIBLE);
+        mFavoritesButton.setVisibility(View.INVISIBLE);
 
         Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
     }
@@ -41,9 +41,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent (MainActivity.this, FavoriteLibrariesActivity.class);
             startActivity(intent);
         }
-        else if (v == mSignUpButton) {
-            Intent intent = new Intent (MainActivity.this, SignUpActivity.class);
-            startActivity(intent);
+        else if (v == mSignInButton) {
+            //check that login was correct in the future
+            if (true) {
+                mSearchButton.setVisibility(View.VISIBLE);
+                mFavoritesButton.setVisibility(View.VISIBLE);
+                mSearchButton.setOnClickListener(this);
+                mFavoritesButton.setOnClickListener(this);
+            } else {
+                //login incorrect, display error
+            }
         }
     }
 }
