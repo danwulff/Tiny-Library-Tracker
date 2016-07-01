@@ -1,4 +1,4 @@
-# _Github User Lookup_
+# _Tiny Library Tracker_
 
 #### _Daniel Wulff's Tiny Library Tracker, July 1st, 2016_
 
@@ -6,11 +6,11 @@
 
 ## Description
 
-_This is an android studio project, still in development. The goal of this project is to provide an app for users to lookup and track 'Tiny Libraries' (search with google to find some examples) within neighborhoods. The goal is to provide google map locations, user registration of libraries and user photo uploads to provide up to date information about the status of said libraries._
+This is an android studio project, still in development. The goal of this project is to provide an app for users to lookup and track 'Tiny Libraries' (search with google to find some examples) within neighborhoods. The goal is to provide google map locations, user registration of libraries and user photo uploads to provide up to date information about the status of said libraries.
 
 ## Setup/Installation Requirements
 
-* _in a terminal navigate to a directory you'd like to place the project folder and type $ git clone https://github.com/danwulff/Tiny-Library-Tracker_
+* _In a terminal navigate to a directory you'd like to place the project folder and type $ git clone https://github.com/danwulff/Tiny-Library-Tracker_
 * _Then start Android Studio_
 * _Select 'Open an existing Android Studio project'_
 * _Browse to the directory you cloned the project from_
@@ -23,11 +23,11 @@ _No known issues at this time._
 
 ## Support and contact details
 
-_If you find any errors or have trouble viewing the app feel free to contact Daniel: danielwulff.ee@gmail.com_
+If you find any errors or have trouble viewing the app feel free to contact Daniel: danielwulff.ee@gmail.com
 
 ## Technologies Used
 
-_The app was written using Android Studio, and written in the traditional Java and .xml languages. SDK V. 23.0.3 was used to build the app with support for min SDK V. 15._
+The app was written using Android Studio, and written in the traditional Java and .xml languages. SDK V. 23.0.3 was used to build the app with support for min SDK V. 15.
 
 ### License
 
