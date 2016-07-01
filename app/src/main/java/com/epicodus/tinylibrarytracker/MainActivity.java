@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -14,8 +15,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.signInButton) Button mSignInButton;
+    @Bind(R.id.signUpButton) Button mSignUpButton;
     @Bind(R.id.searchButton) Button mSearchButton;
     @Bind(R.id.favoritesButton) Button mFavoritesButton;
+    @Bind(R.id.emailInput) EditText mEmailInput;
+    @Bind(R.id.passwordInput) EditText mPasswordInput;
     @Bind(R.id.mainImage) ImageView mMainImage;
 
     @Override
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         mSignInButton.setOnClickListener(this);
+        mSignUpButton.setOnClickListener(this);
         mSearchButton.setVisibility(View.INVISIBLE);
         mFavoritesButton.setVisibility(View.INVISIBLE);
 
@@ -51,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 //login incorrect, display error
             }
+        }
+        else if (v == mSignUpButton) {
+            Intent intent = new Intent (MainActivity.this, SignUpActivity.class);
+            intent.putExtra("email", mEmailInput.getText().toString());
+            intent.putExtra("password", mPasswordInput.getText().toString());
+            startActivity(intent);
         }
     }
 }
