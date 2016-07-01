@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -13,6 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.signUpButton) Button mSignUpButton;
     @Bind(R.id.searchButton) Button mSearchButton;
     @Bind(R.id.favoritesButton) Button mFavoritesButton;
+    @Bind(R.id.mainImage) ImageView mMainImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSignUpButton.setOnClickListener(this);
         mSearchButton.setOnClickListener(this);
         mFavoritesButton.setOnClickListener(this);
+
+        Picasso.with(this).load(R.drawable.main).fit().centerInside().into(mMainImage);
     }
 
     @Override
