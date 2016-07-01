@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSearchButton.setOnClickListener(this);
         mFavoritesButton.setOnClickListener(this);
 
-        Picasso.with(this).load(R.drawable.main).fit().centerInside().into(mMainImage);
+        Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
     }
 
     @Override
