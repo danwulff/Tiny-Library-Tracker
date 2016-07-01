@@ -7,30 +7,30 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.epicodus.tinylibrarytracker.MainActivity">
+    tools:context="com.epicodus.tinylibrarytracker.SearchResults">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Main"
-        android:id="@+id/textView"
+        android:text="Search Results"
+        android:id="@+id/textView3"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Favorites"
-        android:id="@+id/favorites"
+        android:text="Create New Library"
+        android:id="@+id/createNew"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
-        android:id="@+id/search"
-        android:layout_above="@+id/favorites"
+        android:text="Library Display"
+        android:id="@+id/library"
+        android:layout_above="@+id/createNew"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
