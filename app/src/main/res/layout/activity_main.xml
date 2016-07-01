@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Favorites"
-        android:id="@+id/favorites"
+        android:id="@+id/favoritesButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -30,7 +30,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
-        android:id="@+id/search"
-        android:layout_above="@+id/favorites"
+        android:id="@+id/searchButton"
+        android:layout_above="@+id/favoritesButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:id="@+id/signUpButton"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

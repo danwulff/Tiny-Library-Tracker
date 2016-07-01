@@ -3,11 +3,11 @@ package com.epicodus.tinylibrarytracker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SearchResults extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        setContentView(R.layout.activity_sign_up);
     }
 }

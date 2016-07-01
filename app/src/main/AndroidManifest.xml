@@ -15,31 +15,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUp">
+        <activity android:name=".SignUpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.tinylibrarytracker.MainActivity">
             </meta-data>
         </activity>
-        <activity android:name=".SearchResults">
+        <activity android:name=".SearchResultsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.tinylibrarytracker.MainActivity">
             </meta-data>
         </activity>
-        <activity android:name=".Library">
+        <activity android:name=".LibraryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.SearchResults">
+                android:value=".SearchResultsActivity">
             </meta-data>
         </activity>
-        <activity android:name=".CreateNewLibrary">
+        <activity android:name=".CreateNewLibraryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.SearchResults">
+                android:value=".SearchResultsActivity">
             </meta-data>
         </activity>
-        <activity android:name=".FavoriteLibraries">
+        <activity android:name=".FavoriteLibrariesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.tinylibrarytracker.MainActivity">
