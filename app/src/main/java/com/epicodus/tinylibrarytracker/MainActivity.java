@@ -1,9 +1,11 @@
 package com.epicodus.tinylibrarytracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,13 +16,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    @Bind(R.id.mainImage) ImageView mMainImage;
+
     @Bind(R.id.signInButton) Button mSignInButton;
     @Bind(R.id.signUpButton) Button mSignUpButton;
-    @Bind(R.id.searchButton) Button mSearchButton;
-    @Bind(R.id.favoritesButton) Button mFavoritesButton;
     @Bind(R.id.emailInput) EditText mEmailInput;
     @Bind(R.id.passwordInput) EditText mPasswordInput;
-    @Bind(R.id.mainImage) ImageView mMainImage;
+
+    @Bind(R.id.searchInput) EditText mSearchInput;
+    @Bind(R.id.searchButton) Button mSearchButton;
+    @Bind(R.id.favoritesButton) Button mFavoritesButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
+        mSearchInput.setVisibility(View.INVISIBLE);
         mSearchButton.setVisibility(View.INVISIBLE);
         mFavoritesButton.setVisibility(View.INVISIBLE);
+
 
         Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
     }
@@ -49,6 +56,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (v == mSignInButton) {
             //check that login was correct in the future
             if (true) {
+                mSignInButton.setVisibility(View.INVISIBLE);
+                mSignUpButton.setVisibility(View.INVISIBLE);
+                mEmailInput.clearFocus();
+                mPasswordInput.clearFocus();
+                mEmailInput.setVisibility(View.INVISIBLE);
+                mPasswordInput.setVisibility(View.INVISIBLE);
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                mSearchInput.setVisibility(View.VISIBLE);
                 mSearchButton.setVisibility(View.VISIBLE);
                 mFavoritesButton.setVisibility(View.VISIBLE);
                 mSearchButton.setOnClickListener(this);
