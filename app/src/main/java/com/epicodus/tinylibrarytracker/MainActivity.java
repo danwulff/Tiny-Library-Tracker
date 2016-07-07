@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.emailInput) EditText mEmailInput;
     @Bind(R.id.passwordInput) EditText mPasswordInput;
 
+    @Bind(R.id.userName) TextView mUserName;
     @Bind(R.id.searchInput) EditText mSearchInput;
     @Bind(R.id.searchButton) Button mSearchButton;
     @Bind(R.id.favoritesButton) Button mFavoritesButton;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
+        mUserName.setVisibility(View.INVISIBLE);
         mSearchInput.setVisibility(View.INVISIBLE);
         mSearchButton.setVisibility(View.INVISIBLE);
         mFavoritesButton.setVisibility(View.INVISIBLE);
@@ -56,16 +59,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (v == mSignInButton) {
             //check that login was correct in the future
             if (true) {
+                //show sign in message
+                mUserName.setText("Signed in as: " + mEmailInput.getText().toString());
+                mUserName.setVisibility(View.VISIBLE);
+                //hide sign-in/sign-up
                 mSignInButton.setVisibility(View.INVISIBLE);
                 mSignUpButton.setVisibility(View.INVISIBLE);
                 mEmailInput.clearFocus();
                 mPasswordInput.clearFocus();
                 mEmailInput.setVisibility(View.INVISIBLE);
                 mPasswordInput.setVisibility(View.INVISIBLE);
-
+                //hide keyboard
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
+                //show search & favorites
                 mSearchInput.setVisibility(View.VISIBLE);
                 mSearchButton.setVisibility(View.VISIBLE);
                 mFavoritesButton.setVisibility(View.VISIBLE);

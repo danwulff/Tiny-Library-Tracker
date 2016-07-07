@@ -32,6 +32,8 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/emailInput"
@@ -41,6 +43,8 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/passwordInput"
@@ -50,6 +54,8 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:text="Sign In"
         android:id="@+id/signInButton"
         android:layout_below="@+id/passwordInput"
@@ -58,14 +64,27 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:text="Sign Up"
         android:id="@+id/signUpButton"
         android:layout_below="@+id/signInButton"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="username"
+        android:id="@+id/userName"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true" />
+
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:inputType="text"
         android:id="@+id/searchInput"
         android:layout_above="@+id/searchButton"
@@ -74,6 +93,8 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:text="Search"
         android:id="@+id/searchButton"
         android:layout_above="@+id/favoritesButton"
@@ -83,10 +104,12 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:text="Favorites"
         android:id="@+id/favoritesButton"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="6dp"
         android:layout_centerHorizontal="true" />
 
 
