@@ -1,5 +1,7 @@
 package com.epicodus.tinylibrarytracker.services;
 
+import android.util.Log;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -12,6 +14,7 @@ import se.akerfeldt.okhttp.signpost.SigningInterceptor;
  * Created by Guest on 7/11/16.
  */
 public class CloudinaryService {
+    public static final String TAG = CloudinaryService.class.getSimpleName();
 
     public static void uploadPhoto(String location, Callback callback) {
         //from yelp api call
@@ -47,6 +50,7 @@ public class CloudinaryService {
         urlBuilder.addQueryParameter("upload_preset", "stestv7k");
 
         String url = urlBuilder.build().toString();
+        Log.d(TAG + "api url", url);
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);
         call.enqueue(callback);

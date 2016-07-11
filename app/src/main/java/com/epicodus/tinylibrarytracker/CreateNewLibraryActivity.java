@@ -44,7 +44,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CreateNewLibraryActivity extends AppCompatActivity {
+public class CreateNewLibraryActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.backgroundLayout) View mBackgroundLayout;
     @Bind(R.id.selectPhotoButton) Button mSelectPhotoButton;
     @Bind(R.id.newLibraryButton) Button mNewLibraryButton;
@@ -65,26 +65,27 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
         Drawable background = backgroundimage.getBackground();
         background.setAlpha(80);
 
-        mSelectPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(view == mSelectPhotoButton){
-                    Log.d(TAG, "clicked choose a photo");
-                    selectImage();
-                } else if (view == mNewLibraryButton) {
-                    Log.d(TAG, "clicked submit");
-                    //check to make sure all fields having proper input
-                    if(newPhotoUri != null) {
-                         Log.d(TAG + " photo URI", newPhotoUri.toString());
-                        createLibrary();
-                     }
-                    else {
-                         //display warning, do nothing
-                         Log.d(TAG, "no photoUri");
-                     }
-                }
+        mSelectPhotoButton.setOnClickListener(this);
+        mNewLibraryButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == mSelectPhotoButton){
+            Log.d(TAG, "clicked choose a photo");
+            selectImage();
+        } else if (view == mNewLibraryButton) {
+            Log.d(TAG, "clicked submit");
+            //check to make sure all fields having proper input
+            if(newPhotoUri != null) {
+                Log.d(TAG + " photo URI", newPhotoUri.toString());
+                createLibrary();
             }
-        });;
+            else {
+                //display warning, do nothing
+                Log.d(TAG, "no photoUri");
+            }
+        }
     }
 
 
