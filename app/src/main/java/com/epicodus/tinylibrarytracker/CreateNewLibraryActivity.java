@@ -1,5 +1,6 @@
 package com.epicodus.tinylibrarytracker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +69,8 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
         });;
     }
 
+    static final int MY_PERMISSIONS_REQUEST_USE_EXTERNAL = 100;
+
     private void selectImage() {
         final CharSequence[] items = {"Take Photo", "Choose from Library", "cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateNewLibraryActivity.this);
@@ -75,7 +80,36 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
                     Log.d(TAG, "take photo chosen");
-                    dispatchTakePictureIntent();
+                    int permissionCheck = ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if(permissionCheck == PackageManager.PERMISSION_DENIED) {
+                        Log.d(TAG, "permission denied, ask for permission");
+                        // Here, thisActivity is the current activity
+                        if (ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this,
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+
+                            // Should we show an explanation?
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(CreateNewLibraryActivity.this,
+                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                                // Show an expanation to the user *asynchronously* -- don't block
+                                // this thread waiting for the user's response! After the user
+                                // sees the explanation, try again to request the permission.
+
+                            } else {
+                                // No explanation needed, we can request the permission.
+                                ActivityCompat.requestPermissions(CreateNewLibraryActivity.this,
+                                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST_USE_EXTERNAL);
+
+                                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                                // app-defined int constant. The callback method gets the
+                                // result of the request.
+                            }
+                        }
+                    } else if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                        dispatchTakePictureIntent();
+                    }
                 } else if (items[item].equals("Choose from Library")) {
                     Log.d(TAG, "choose from library chosen");
                 } else if (items[item].equals("Cancel")) {
@@ -84,6 +118,32 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_USE_EXTERNAL: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    dispatchTakePictureIntent();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
