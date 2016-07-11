@@ -40,6 +40,9 @@ import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class CreateNewLibraryActivity extends AppCompatActivity {
     @Bind(R.id.backgroundLayout) View mBackgroundLayout;
@@ -57,6 +60,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_library);
         ButterKnife.bind(this);
 
+        //set background image
         View backgroundimage = mBackgroundLayout;
         Drawable background = backgroundimage.getBackground();
         background.setAlpha(80);
@@ -65,14 +69,18 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(view == mSelectPhotoButton){
+                    Log.d(TAG, "clicked choose a photo");
                     selectImage();
                 } else if (view == mNewLibraryButton) {
+                    Log.d(TAG, "clicked submit");
                     //check to make sure all fields having proper input
-                     if(newPhotoUri != null) {
+                    if(newPhotoUri != null) {
+                         Log.d(TAG + " photo URI", newPhotoUri.toString());
                         createLibrary();
                      }
                     else {
                          //display warning, do nothing
+                         Log.d(TAG, "no photoUri");
                      }
                 }
             }
@@ -224,11 +232,12 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
     //--------------
 
     private void createLibrary() {
-        /*
+        Log.d(TAG, "createLibrary()");
+
         //for now, upload photo to api
         final CloudinaryService cloudinaryService = new CloudinaryService();
 
-        cloudinaryService.uploadPhoto(newPhotoUri, new Callback() {
+        cloudinaryService.uploadPhoto(newPhotoUri.toString(), new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -237,9 +246,16 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) {
+                String jsonData = "nope";
+                try {
+                    jsonData = response.body().string();
+                } catch (Exception e) {
+                    e.printStackTrace();;
+                }
 
+                Log.d(TAG + "onResponse ", jsonData);
             }
-        });*/
+        });
 
 
         //eventually publish library object to firebase with photo URL from API call,

@@ -1,7 +1,12 @@
 package com.epicodus.tinylibrarytracker.services;
 
+import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer;
+import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 
 /**
  * Created by Guest on 7/11/16.
@@ -25,10 +30,25 @@ public class CloudinaryService {
 //        Call call = client.newCall(request);
 //        call.enqueue(callback);
 
-        //https call needed:
+        //https call needed for authenticated requests:
         // https://api.cloudinary.com/v1_1/< cloud name >/<type>/upload&api_key="stuff"&file=DataUri&public_id="name"&signature="hexadecimal shiz"&timestamp=1708237
         // https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload
 
-        //signature = SHA-1 from public_id & timestamp
+        //http call needed for unauthenticated requests:
+        //https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload
+
+//        file=https://pbs.twimg.com/profile_images/378800000274368432/a76142d1ae2d569365384899e1e6b9d4.jpeg
+//        upload_preset=stestv7k
+
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload").newBuilder();
+        urlBuilder.addQueryParameter("file", "https://pbs.twimg.com/profile_images/378800000274368432/a76142d1ae2d569365384899e1e6b9d4.jpeg");
+        urlBuilder.addQueryParameter("upload_preset", "stestv7k");
+
+        String url = urlBuilder.build().toString();
+        Request request = new Request.Builder().url(url).build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
     }
 }
