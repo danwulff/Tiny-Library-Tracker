@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.epicodus.tinylibrarytracker.services.CloudinaryService;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -43,6 +44,7 @@ import butterknife.ButterKnife;
 public class CreateNewLibraryActivity extends AppCompatActivity {
     @Bind(R.id.backgroundLayout) View mBackgroundLayout;
     @Bind(R.id.selectPhotoButton) Button mSelectPhotoButton;
+    @Bind(R.id.newLibraryButton) Button mNewLibraryButton;
     @Bind(R.id.placeholderImage) ImageView mPlaceholderImage;
 
     public static final String TAG = CreateNewLibraryActivity.class.getSimpleName();
@@ -64,11 +66,23 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(view == mSelectPhotoButton){
                     selectImage();
+                } else if (view == mNewLibraryButton) {
+                    //check to make sure all fields having proper input
+                     if(newPhotoUri != null) {
+                        createLibrary();
+                     }
+                    else {
+                         //display warning, do nothing
+                     }
                 }
             }
         });;
     }
 
+
+    //----------------------------------------------------------------------------------------------
+    //selectImage
+    //-----------
     static final int MY_PERMISSIONS_REQUEST_USE_EXTERNAL = 100;
 
     private void selectImage() {
@@ -121,8 +135,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_USE_EXTERNAL: {
                 // If request is cancelled, the result arrays are empty.
@@ -134,7 +147,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
                     dispatchTakePictureIntent();
 
                 } else {
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -147,8 +159,8 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
     }
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    String photoFileName = "tinyLibraryTest.jpg";
-    Uri newPhotoUri;
+    String photoFileName = "tinyLibraryTest.jpg";   //will overwrite previous picture in gallery at the moment, need to create dynamic name
+    Uri newPhotoUri = null;
 
     public void dispatchTakePictureIntent() {
             // create Intent to take a picture and return control to the calling application
@@ -163,15 +175,17 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
             }
         }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Uri takenPhotoUri = getPhotoFileUri(photoFileName);
-                // by this point we have the camera photo on disk
-                Bitmap takenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
                 // Load the taken image into a preview
-                mPlaceholderImage.setImageBitmap(takenImage);
+                Picasso.with(this).load(takenPhotoUri).fit().centerCrop().into(mPlaceholderImage);
+                //save file Uri for reference elsewhere
+                newPhotoUri = takenPhotoUri;
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -203,5 +217,32 @@ public class CreateNewLibraryActivity extends AppCompatActivity {
     private boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
         return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //Create Library
+    //--------------
+
+    private void createLibrary() {
+        /*
+        //for now, upload photo to api
+        final CloudinaryService cloudinaryService = new CloudinaryService();
+
+        cloudinaryService.uploadPhoto(newPhotoUri, new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+
+            }
+        });*/
+
+
+        //eventually publish library object to firebase with photo URL from API call,
+        //instead, as a placeholder, call new activity and pass url, to see url loaded from internet url
     }
 }
