@@ -26,14 +26,14 @@ public class CloudinaryService {
 
     public static void uploadPhoto(String location, Callback callback) {
 
-        Log.d("img location", location);
+//        Log.wtf("start of image conversion", location);
         // image, convert to Base64 string
         Bitmap img = BitmapFactory.decodeFile(location);
         String imgString = convertBitmapToString(img);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
 
@@ -45,10 +45,11 @@ public class CloudinaryService {
 //        String url = urlBuilder.build().toString();
 
         String url = "https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload?" +
-                "file=" + "data%3Aimage%2Fbitmap%3Bbase64%" + imgString +
+                "file=" + "data%3Aimage%2Fjpeg%3Bbase64%2C" + imgString +
                 "&folder=tinylibrarypictures" +
                 "&upload_preset=stestv7k";
 
+//        Log.wtf("end of image conversion, base 64 url creation", "yup");
 
 //        Log.d(TAG + ": api url", url);
         Request request = new Request.Builder().url(url).build();
@@ -81,6 +82,8 @@ public class CloudinaryService {
         img.compress(Bitmap.CompressFormat.JPEG, 100, byteArray);
         byte[] imgArray = byteArray.toByteArray();
         String imgString = Base64.encodeToString(imgArray, Base64.URL_SAFE);
+
+        Log.d("imgstring length", String.valueOf(imgString.length()));
 
         return imgString;
     }
