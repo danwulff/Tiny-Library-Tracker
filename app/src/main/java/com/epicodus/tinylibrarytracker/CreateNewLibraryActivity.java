@@ -216,7 +216,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             }
 
             // Return the file target for the photo based on filename
-            return Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator + fileName));
+            return Uri.fromFile(new File(mediaStorageDir.getAbsolutePath() + File.separator + fileName));
         }
         return null;
     }
@@ -237,7 +237,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         //for now, upload photo to api
         final CloudinaryService cloudinaryService = new CloudinaryService();
 
-        cloudinaryService.uploadPhoto(newPhotoUri.toString(), new Callback() {
+        cloudinaryService.uploadPhoto(newPhotoUri.toString().replace("file:", ""), new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {

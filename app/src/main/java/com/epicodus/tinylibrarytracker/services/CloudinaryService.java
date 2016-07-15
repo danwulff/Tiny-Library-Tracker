@@ -2,8 +2,12 @@ package com.epicodus.tinylibrarytracker.services;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.util.Log;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -21,51 +25,63 @@ public class CloudinaryService {
     public static final String TAG = CloudinaryService.class.getSimpleName();
 
     public static void uploadPhoto(String location, Callback callback) {
-        //from yelp api call
-//        OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer(Constants.YELP_CONSUMER_KEY, Constants.YELP_CONSUMER_SECRET);
-//        consumer.setTokenWithSecret(Constants.YELP_TOKEN, Constants.YELP_TOKEN_SECRET);
-//
-//        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new SigningInterceptor(consumer)).build();
-//
-//        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.YELP_BASE_URL).newBuilder();
-//        urlBuilder.addQueryParameter(Constants.YELP_LOCATION_QUERY_PARAMETER, location);
-//        Log.d("url object", "" + urlBuilder.build());
-//        String url = urlBuilder.build().toString();
-//
-//        Request request = new Request.Builder().url(url).build();
-//
-//        Call call = client.newCall(request);
-//        call.enqueue(callback);
 
-        //https call needed for authenticated requests:
-        // https://api.cloudinary.com/v1_1/< cloud name >/<type>/upload&api_key="stuff"&file=DataUri&public_id="name"&signature="hexadecimal shiz"&timestamp=1708237
-        // https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload
-
-        //http call needed for unauthenticated requests:
-        //https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload
-
-//        file=https://pbs.twimg.com/profile_images/378800000274368432/a76142d1ae2d569365384899e1e6b9d4.jpeg
-//        upload_preset=stestv7k
-
+        Log.d("img location", location);
+        // image, convert to Base64 string
         Bitmap img = BitmapFactory.decodeFile(location);
-        //see answer two for cropping, center thingy: http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
-
+        String imgString = convertBitmapToString(img);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
                 .build();
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload").newBuilder();
-        urlBuilder.addQueryParameter("file", "https://pbs.twimg.com/profile_images/378800000274368432/a76142d1ae2d569365384899e1e6b9d4.jpeg");
-        urlBuilder.addQueryParameter("folder", "tinylibrarypictures");
-        urlBuilder.addQueryParameter("upload_preset", "stestv7k");
+//        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload").newBuilder();
+//        urlBuilder.addQueryParameter("file", imgString);
+//        urlBuilder.addQueryParameter("folder", "tinylibrarypictures");
+//        urlBuilder.addQueryParameter("upload_preset", "stestv7k");
+//
+//        String url = urlBuilder.build().toString();
 
-        String url = urlBuilder.build().toString();
-        Log.d(TAG + "api url", url);
+        String url = "https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload?" +
+                "file=" + "data%3Aimage%2Fbitmap%3Bbase64%" + imgString +
+                "&folder=tinylibrarypictures" +
+                "&upload_preset=stestv7k";
+
+
+//        Log.d(TAG + ": api url", url);
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);
         call.enqueue(callback);
+    }
+
+    private static String convertBitmapToString(Bitmap img) {
+        int width = img.getWidth();
+        int height = img.getHeight();
+        //resize to 3MP if > 3MP (2048 x 1536)
+        if( (width > 2048 && height > 1536) || (width > 1536 && height > 2048) ) {
+            if (width >= height) {
+                int scaledWidth = (int)((double)width / (double)height * 1536.0);
+                img = Bitmap.createScaledBitmap(img, scaledWidth, 1536 , false);
+            } else {
+                int scaledHeight = (int)((double)height / (double)width * 1536.0);
+                img = Bitmap.createScaledBitmap(img, 1536, scaledHeight , false);
+            }
+        }
+//        Log.d("scaledWidth", String.valueOf(img.getWidth()));
+//        Log.d("scaledHeight", String.valueOf(img.getHeight()));
+        //get square cropped image, http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
+        int dimension = Math.min(img.getWidth(), img.getHeight());
+        img = ThumbnailUtils.extractThumbnail(img, dimension, dimension);
+        Log.d("width thumbnail", String.valueOf(img.getWidth()));
+        Log.d("height thumbnail", String.valueOf(img.getHeight()));
+        //to Base64 encoded string
+        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.JPEG, 100, byteArray);
+        byte[] imgArray = byteArray.toByteArray();
+        String imgString = Base64.encodeToString(imgArray, Base64.URL_SAFE);
+
+        return imgString;
     }
 }
