@@ -1,5 +1,7 @@
 package com.epicodus.tinylibrarytracker.services;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
@@ -44,6 +46,10 @@ public class CloudinaryService {
 
 //        file=https://pbs.twimg.com/profile_images/378800000274368432/a76142d1ae2d569365384899e1e6b9d4.jpeg
 //        upload_preset=stestv7k
+
+        Bitmap img = BitmapFactory.decodeFile(location);
+        //see answer two for cropping, center thingy: http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
+
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
