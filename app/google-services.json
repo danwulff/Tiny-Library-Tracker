@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "739840425468",
+    "firebase_url": "https://tiny-library-tracker.firebaseio.com",
+    "project_id": "tiny-library-tracker",
+    "storage_bucket": "tiny-library-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739840425468:android:1cccb3387f8239ae",
+        "android_client_info": {
+          "package_name": "com.epicodus.tinylibrarytracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739840425468-k6he6pgmacg298r5fnrd4ggg69dqmpd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyqlOcy5i69HdNaBBt_w3MhcsxYZ5QCqY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
