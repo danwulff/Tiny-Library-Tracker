@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".SignUpActivity">
+    tools:context=".ui.SignUpActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,20 +18,50 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/emailDisplay"
+        android:id="@+id/nameInput"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
+        android:hint="Username" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/passwordDisplay"
-        android:layout_below="@+id/emailDisplay"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailInput"
+        android:layout_below="@+id/nameInput"
+        android:layout_centerHorizontal="true"
+        android:hint="example@google.com" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordInput"
+        android:layout_below="@+id/emailInput"
+        android:layout_centerHorizontal="true"
+        android:hint="password" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordValidateInput"
+        android:layout_below="@+id/passwordInput"
+        android:layout_centerHorizontal="true"
+        android:hint="confirm password" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:id="@+id/createUserButton"
+        android:layout_below="@+id/passwordValidateInput"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

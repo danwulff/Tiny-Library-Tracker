@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.epicodus.tinylibrarytracker">
 
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +16,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.epicodus.android.tinylibrarytracker"
@@ -21,46 +23,44 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity" android:theme="@style/NoActionBarTheme">
+        <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity">
+        <activity android:name=".ui.SignUpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.MainActivity">
-            </meta-data>
+                android:value="com.epicodus.tinylibrarytracker.ui.LoginActivity"></meta-data>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/NoActionBarTheme">
         </activity>
         <activity android:name=".SearchResultsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.MainActivity">
-            </meta-data>
-        </activity>
-        <activity android:name=".LibraryActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SearchResultsActivity">
-            </meta-data>
-        </activity>
-        <activity android:name=".CreateNewLibraryActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SearchResultsActivity">
-            </meta-data>
+                android:value="com.epicodus.tinylibrarytracker.MainActivity"></meta-data>
         </activity>
         <activity android:name=".FavoriteLibrariesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.MainActivity">
-            </meta-data>
+                android:value="com.epicodus.tinylibrarytracker.MainActivity"></meta-data>
+        </activity>
+        <activity android:name=".LibraryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SearchResultsActivity"></meta-data>
+        </activity>
+        <activity android:name=".CreateNewLibraryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SearchResultsActivity"></meta-data>
         </activity>
     </application>
-
 </manifest>

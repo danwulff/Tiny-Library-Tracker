@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.epicodus.tinylibrarytracker.ui.SignUpActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
