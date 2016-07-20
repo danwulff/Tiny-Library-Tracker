@@ -10,6 +10,8 @@ import android.util.Base64;
 import org.apache.http.protocol.HTTP;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -37,12 +39,22 @@ public class CloudinaryService {
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
 
-        //https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload?file=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4%2F%2F8%2Fw38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg%3D%3D&folder=tinylibrarypictures&upload_preset=stestv7k
 //        String image = "data:image/png;base64," + imgString;
         String image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+        String urlEncoded;
+        try {
+            urlEncoded = URLEncoder.encode(image, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError("UTF-8 is unknown");
+            // or 'throw new AssertionError("Impossible things are happening today. " +
+            //                              "Consider buying a lottery ticket!!");'
+        }
+        Log.d("image string", image);
+        Log.d("image string encoded", urlEncoded);
 
         RequestBody requestBody = new FormBody.Builder()
                 .addEncoded("file", image)
+//                .add("file", urlEncoded)
                 .add("folder", "tinylibrarypictures")
                 .add("upload_preset", "stestv7k")
                 .build();
@@ -78,7 +90,7 @@ public class CloudinaryService {
         }
         //get square cropped image, http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
         int dimension = Math.min(img.getWidth(), img.getHeight());
-        img = ThumbnailUtils.extractThumbnail(img, 100, 100);
+        img = ThumbnailUtils.extractThumbnail(img, 10, 10);
         //to Base64 encoded string
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
         img.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
