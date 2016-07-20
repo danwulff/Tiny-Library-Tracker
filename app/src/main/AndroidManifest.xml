@@ -42,37 +42,37 @@
                 android:value="com.epicodus.tinylibrarytracker.ui.LoginActivity"></meta-data>
         </activity>
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".ui.MainActivity"
             android:theme="@style/NoActionBarTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".SearchResultsActivity"
+        <activity android:name=".ui.SearchResultsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.MainActivity"></meta-data>
+                android:value=".ui.MainActivity"></meta-data>
         </activity>
-        <activity android:name=".FavoriteLibrariesActivity" android:configChanges="orientation"
+        <activity android:name=".ui.FavoriteLibrariesActivity" android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.MainActivity"></meta-data>
+                android:value=".ui.MainActivity"></meta-data>
         </activity>
-        <activity android:name=".LibraryActivity"
+        <activity android:name=".ui.LibraryActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SearchResultsActivity"></meta-data>
+                android:value=".ui.SearchResultsActivity"></meta-data>
         </activity>
-        <activity android:name=".CreateNewLibraryActivity"
+        <activity android:name=".ui.CreateNewLibraryActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SearchResultsActivity"></meta-data>
+                android:value=".ui.SearchResultsActivity"></meta-data>
         </activity>
     </application>
 </manifest>

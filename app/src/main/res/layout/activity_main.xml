@@ -8,7 +8,7 @@
     android:paddingTop="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    tools:context="com.epicodus.tinylibrarytracker.MainActivity">
+    tools:context=".ui.MainActivity">
 
 
     <ImageView

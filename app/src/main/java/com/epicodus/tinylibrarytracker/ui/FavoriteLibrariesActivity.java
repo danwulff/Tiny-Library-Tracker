@@ -1,7 +1,9 @@
-package com.epicodus.tinylibrarytracker;
+package com.epicodus.tinylibrarytracker.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.epicodus.tinylibrarytracker.R;
 
 public class FavoriteLibrariesActivity extends AppCompatActivity {
 

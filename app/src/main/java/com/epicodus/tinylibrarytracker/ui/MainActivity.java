@@ -1,4 +1,4 @@
-package com.epicodus.tinylibrarytracker;
+package com.epicodus.tinylibrarytracker.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.epicodus.tinylibrarytracker.ui.SignUpActivity;
+import com.epicodus.tinylibrarytracker.R;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
