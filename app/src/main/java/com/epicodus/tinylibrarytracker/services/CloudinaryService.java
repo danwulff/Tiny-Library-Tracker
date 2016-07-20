@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.Base64;
 
+import org.apache.http.protocol.HTTP;
+
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.TimeUnit;
 
@@ -30,22 +32,22 @@ public class CloudinaryService {
     public static void uploadPhoto(String imgString, Callback callback) {
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
 
         //https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload?file=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4%2F%2F8%2Fw38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg%3D%3D&folder=tinylibrarypictures&upload_preset=stestv7k
+//        String image = "data:image/png;base64," + imgString;
+        String image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-//                .add("file", "data%3Aimage%2Fjpeg%3Bbase64%2C" + imgString)
-                .addFormDataPart("file", "data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4%2F%2F8%2Fw38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg%3D%3D")
-                .addFormDataPart("folder", "tinylibrarypictures")
-                .addFormDataPart("upload_preset", "stestv7k")
+        RequestBody requestBody = new FormBody.Builder()
+                .addEncoded("file", image)
+                .add("folder", "tinylibrarypictures")
+                .add("upload_preset", "stestv7k")
                 .build();
 
-        String url = "https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload";
+       String url = "https://api.cloudinary.com/v1_1/tlibrarytracker/image/upload";
 
         Request request = new Request.Builder()
                 .url(url)
@@ -53,7 +55,6 @@ public class CloudinaryService {
                 .build();
 
         Log.d("request url", request.toString());
-//        Log.d("request url body", request.url().queryParameterValue(1));
         Call call = client.newCall(request);
         call.enqueue(callback);
     }
@@ -77,12 +78,12 @@ public class CloudinaryService {
         }
         //get square cropped image, http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
         int dimension = Math.min(img.getWidth(), img.getHeight());
-        img = ThumbnailUtils.extractThumbnail(img, dimension, dimension);
+        img = ThumbnailUtils.extractThumbnail(img, 100, 100);
         //to Base64 encoded string
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.JPEG, 100, byteArray);
+        img.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
         byte[] imgArray = byteArray.toByteArray();
-        String imgString = Base64.encodeToString(imgArray, Base64.URL_SAFE);
+        String imgString = Base64.encodeToString(imgArray, Base64.DEFAULT);
 
         return imgString;
     }
