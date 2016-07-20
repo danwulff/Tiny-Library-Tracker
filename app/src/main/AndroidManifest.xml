@@ -26,38 +26,50 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".ui.LoginActivity">
+        <activity android:name=".ui.LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SignUpActivity">
+        <activity android:name=".ui.SignUpActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.tinylibrarytracker.ui.LoginActivity"></meta-data>
         </activity>
 
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/NoActionBarTheme">
+        <activity android:name=".MainActivity"
+            android:theme="@style/NoActionBarTheme"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".SearchResultsActivity">
+        <activity android:name=".SearchResultsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.tinylibrarytracker.MainActivity"></meta-data>
         </activity>
-        <activity android:name=".FavoriteLibrariesActivity">
+        <activity android:name=".FavoriteLibrariesActivity" android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.epicodus.tinylibrarytracker.MainActivity"></meta-data>
         </activity>
-        <activity android:name=".LibraryActivity">
+        <activity android:name=".LibraryActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SearchResultsActivity"></meta-data>
         </activity>
-        <activity android:name=".CreateNewLibraryActivity">
+        <activity android:name=".CreateNewLibraryActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SearchResultsActivity"></meta-data>

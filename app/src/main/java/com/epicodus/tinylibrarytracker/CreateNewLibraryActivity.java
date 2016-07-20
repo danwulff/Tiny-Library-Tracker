@@ -237,7 +237,16 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         //for now, upload photo to api
         final CloudinaryService cloudinaryService = new CloudinaryService();
 
-        cloudinaryService.uploadPhoto(newPhotoUri.toString().replace("file:", ""), new Callback() {
+        //move bitmap conversion to here from service to reduce cpu load on thread
+        // image, convert to Base64 string
+        Log.d("create library", "bitmapfactory.decodefile");
+        Bitmap img = BitmapFactory.decodeFile(newPhotoUri.toString().replace("file:", ""));
+
+        Log.d("create library", "cloudinaryservice.convertbitmaptoString()");
+        String imgString = CloudinaryService.convertBitmapToString(img);
+
+        Log.d("create library", "upload photo");
+        cloudinaryService.uploadPhoto(imgString, new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
