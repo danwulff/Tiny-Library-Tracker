@@ -1,11 +1,9 @@
 package com.epicodus.tinylibrarytracker.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,21 +29,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        mUserName.setVisibility(View.INVISIBLE);
-//        mSearchInput.setVisibility(View.INVISIBLE);
-//        mSearchButton.setVisibility(View.INVISIBLE);
-//        mFavoritesButton.setVisibility(View.INVISIBLE);
-
         mSearchButton.setOnClickListener(this);
         mFavoritesButton.setOnClickListener(this);
 
-
-        Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
-
+        Picasso.with(this).load(R.drawable.library3).fit().centerCrop().into(mMainImage);
 
         mUserName.setText("Signed in as: " + "placeholder");
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mSearchInput.getWindowToken(), 0);
+
     }
 
     @Override

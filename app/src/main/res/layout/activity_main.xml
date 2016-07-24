@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
     android:paddingBottom="0dp"
     android:paddingTop="0dp"
     android:paddingLeft="0dp"
@@ -13,7 +12,7 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="250dp"
+        android:layout_height="fill_parent"
         android:id="@+id/mainImage"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
@@ -23,11 +22,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Tiny Library Tracker"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorTextIcons"
         android:id="@+id/title"
         android:textSize="40dp"
         android:textIsSelectable="false"
-        android:layout_below="@+id/mainImage"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textStyle="bold" />
 
@@ -36,6 +35,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="username"
+        android:textColor="@color/colorTextIcons"
         android:id="@+id/userName"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true" />
@@ -43,33 +43,36 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:inputType="text"
+        android:hint="Zip Code"
+        android:gravity="center_horizontal"
+        android:background="@color/hint_background"
         android:id="@+id/searchInput"
-        android:layout_above="@+id/searchButton"
-        android:layout_centerHorizontal="true" />
+        android:textSize="30dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:text="Search"
         android:id="@+id/searchButton"
-        android:layout_above="@+id/favoritesButton"
-        android:layout_marginBottom="50dp"
+        android:layout_below="@+id/searchInput"
+        android:layout_marginBottom="24dp"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:text="Favorites"
         android:id="@+id/favoritesButton"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="6dp"
+        android:layout_below="@id/searchButton"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

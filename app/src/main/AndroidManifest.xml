@@ -27,6 +27,7 @@
         </provider>
 
         <activity android:name=".ui.LoginActivity"
+            android:theme="@style/NoActionBarTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -35,17 +36,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.SignUpActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.epicodus.tinylibrarytracker.ui.LoginActivity"></meta-data>
-        </activity>
-
-        <activity android:name=".ui.MainActivity"
             android:theme="@style/NoActionBarTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".ui.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity android:name=".ui.SearchResultsActivity"
             android:configChanges="orientation"

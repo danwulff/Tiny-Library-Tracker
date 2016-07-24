@@ -35,12 +35,15 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
+        android:layout_marginBottom="4dp"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/emailInput"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
-        android:hint="example@google.com" />
+        android:hint="example@google.com"
+        android:gravity="center_horizontal"
+        android:background="@color/hint_background"/>
 
     <EditText
         android:layout_width="fill_parent"
@@ -52,7 +55,9 @@
         android:id="@+id/passwordInput"
         android:layout_below="@+id/emailInput"
         android:layout_centerHorizontal="true"
-        android:hint="password" />
+        android:hint="password"
+        android:gravity="center_horizontal"
+        android:background="@color/hint_background"/>
 
     <Button
         android:layout_width="fill_parent"

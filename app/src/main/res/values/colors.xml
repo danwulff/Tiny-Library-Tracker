@@ -8,4 +8,6 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
+    <color name="hint_text">#333333</color>
+    <color name="hint_background">#70FFFFFF</color>
 </resources>
