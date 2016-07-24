@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epicodus.tinylibrarytracker.R;
@@ -19,16 +21,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
+    @Bind(R.id.mainImage) ImageView mMainImage;
+
     @Bind(R.id.nameInput) EditText mNameInput;
     @Bind(R.id.emailInput) EditText mEmailInput;
     @Bind(R.id.passwordInput) EditText mPasswordInput;
     @Bind(R.id.passwordValidateInput) EditText mPasswordValidateInput;
     @Bind(R.id.createUserButton) Button mCreateUserButton;
+    @Bind(R.id.signIn) TextView mSignIn;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -42,19 +48,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
-        String email =  intent.getStringExtra("email");
-
-        if(email != null || email != "") {
-            mEmailInput.setText(email);
-        }
+        Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
 
         mAuth = FirebaseAuth.getInstance();
         createAuthStateListener();
-
         createAuthProgressDialog();
 
         mCreateUserButton.setOnClickListener(this);
+        mSignIn.setOnClickListener(this);
     }
 
     private void createAuthProgressDialog() {
@@ -82,6 +83,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if (view == mCreateUserButton) {
             createNewUser();
+        } else if (view == mSignIn) {
+            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
     }
 

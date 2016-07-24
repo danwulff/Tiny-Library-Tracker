@@ -20,11 +20,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.mainImage) ImageView mMainImage;
 
-    @Bind(R.id.signInButton) Button mSignInButton;
-    @Bind(R.id.signUpButton) Button mSignUpButton;
-    @Bind(R.id.emailInput) EditText mEmailInput;
-    @Bind(R.id.passwordInput) EditText mPasswordInput;
-
     @Bind(R.id.userName) TextView mUserName;
     @Bind(R.id.searchInput) EditText mSearchInput;
     @Bind(R.id.searchButton) Button mSearchButton;
@@ -36,15 +31,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mSignInButton.setOnClickListener(this);
-        mSignUpButton.setOnClickListener(this);
-        mUserName.setVisibility(View.INVISIBLE);
-        mSearchInput.setVisibility(View.INVISIBLE);
-        mSearchButton.setVisibility(View.INVISIBLE);
-        mFavoritesButton.setVisibility(View.INVISIBLE);
+//        mUserName.setVisibility(View.INVISIBLE);
+//        mSearchInput.setVisibility(View.INVISIBLE);
+//        mSearchButton.setVisibility(View.INVISIBLE);
+//        mFavoritesButton.setVisibility(View.INVISIBLE);
+
+        mSearchButton.setOnClickListener(this);
+        mFavoritesButton.setOnClickListener(this);
 
 
         Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
+
+
+        mUserName.setText("Signed in as: " + "placeholder");
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSearchInput.getWindowToken(), 0);
     }
 
     @Override
@@ -55,38 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (v == mFavoritesButton) {
             Intent intent = new Intent (MainActivity.this, FavoriteLibrariesActivity.class);
-            startActivity(intent);
-        }
-        else if (v == mSignInButton) {
-            //check that login was correct in the future
-            if (true) {
-                //show sign in message
-                mUserName.setText("Signed in as: " + mEmailInput.getText().toString());
-                mUserName.setVisibility(View.VISIBLE);
-                //hide sign-in/sign-up
-                mSignInButton.setVisibility(View.INVISIBLE);
-                mSignUpButton.setVisibility(View.INVISIBLE);
-                mEmailInput.clearFocus();
-                mPasswordInput.clearFocus();
-                mEmailInput.setVisibility(View.INVISIBLE);
-                mPasswordInput.setVisibility(View.INVISIBLE);
-                //hide keyboard
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                //show search & favorites
-                mSearchInput.setVisibility(View.VISIBLE);
-                mSearchButton.setVisibility(View.VISIBLE);
-                mFavoritesButton.setVisibility(View.VISIBLE);
-                mSearchButton.setOnClickListener(this);
-                mFavoritesButton.setOnClickListener(this);
-            } else {
-                //login incorrect, display error
-            }
-        }
-        else if (v == mSignUpButton) {
-            Intent intent = new Intent (MainActivity.this, SignUpActivity.class);
-            intent.putExtra("email", mEmailInput.getText().toString());
-            intent.putExtra("password", mPasswordInput.getText().toString());
             startActivity(intent);
         }
     }
