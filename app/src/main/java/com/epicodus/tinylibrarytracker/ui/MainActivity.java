@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -61,9 +62,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v == mSearchButton) {
-            Intent intent = new Intent (MainActivity.this, SearchResultsActivity.class);
-            intent.putExtra("zipCode", mSearchInput.getText().toString());
-            startActivity(intent);
+            String input = mSearchInput.getText().toString();
+            if(input.length() == 0) {
+                mSearchInput.setError("Please enter a Zip Code");
+            } else if (input.length() != 5) {
+                mSearchInput.setError("Please enter a 5-digit Zip Code");
+            } else {
+                Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
+                intent.putExtra("zipCode", mSearchInput.getText().toString());
+                startActivity(intent);
+            }
         }
         else if (v == mFavoritesButton) {
             Intent intent = new Intent (MainActivity.this, FavoriteLibrariesActivity.class);

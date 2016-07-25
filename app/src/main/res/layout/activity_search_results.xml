@@ -14,31 +14,25 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Search Results"
-        android:id="@+id/textView3"
+        android:id="@+id/title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Library Display"
-        android:id="@+id/libraryButton"
-        android:layout_above="@+id/createNewButton"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/listRecyclerView"
+        android:layout_below="@+id/title"
+        android:layout_above="@+id/createNewButton" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:text="Create New Library"
         android:id="@+id/createNewButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/libraryList"
-        android:layout_below="@+id/textView3"
-        android:layout_above="@+id/libraryButton"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>

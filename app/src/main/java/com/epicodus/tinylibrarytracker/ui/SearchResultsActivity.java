@@ -3,6 +3,7 @@ package com.epicodus.tinylibrarytracker.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,12 +16,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SearchResultsActivity extends AppCompatActivity implements View.OnClickListener{
-    @Bind(R.id.libraryButton) Button mLibraryButton;
     @Bind(R.id.createNewButton) Button mCreateNewButton;
-    @Bind(R.id.libraryList) ListView mLibraryList;
-    @Bind(R.id.textView3) TextView mTitle;
+    @Bind(R.id.listRecyclerView) RecyclerView mLibraryList;
+    @Bind(R.id.title) TextView mTitle;
 
-    private String[] libraries = new String[] {"Stephen's tardis box", "Clara's library", "Doug's book hut", "Dan's library"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,23 +27,16 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_search_results);
         ButterKnife.bind(this);
 
-        mLibraryButton.setOnClickListener(this);
         mCreateNewButton.setOnClickListener(this);
 
         Intent intent = getIntent();
         int zipCode =  Integer.parseInt(intent.getStringExtra("zipCode"));
-
         mTitle.setText("Search Results: " + zipCode);
 
-        mLibraryList.setAdapter(new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, libraries));
     }
 
     @Override
     public void onClick(View v) {
-        if(v == mLibraryButton) {
-            Intent intent = new Intent (SearchResultsActivity.this, LibraryActivity.class);
-            startActivity(intent);
-        }
         if(v == mCreateNewButton) {
             Intent intent = new Intent (SearchResultsActivity.this, CreateNewLibraryActivity.class);
             startActivity(intent);

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class ZipCode {
     int zipCode;
-    List<String> libraries = new ArrayList<>();
+    List<String> libraries = new ArrayList<>(); //list of library firebase Ids (not library objects)
 
     public ZipCode(){}
 
@@ -16,8 +16,8 @@ public class ZipCode {
         this.zipCode = zipCode;
     }
 
-    public void addLibrary(String library){
-        libraries.add(library);
+    public void addLibrary(String libraryId){
+        libraries.add(libraryId);
     }
 
     public List<String> getLibraries(){
