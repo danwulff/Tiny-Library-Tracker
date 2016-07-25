@@ -48,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
+        Picasso.with(this).load(R.drawable.library_auth).fit().centerCrop().into(mMainImage);
 
         mAuth = FirebaseAuth.getInstance();
         createAuthStateListener();

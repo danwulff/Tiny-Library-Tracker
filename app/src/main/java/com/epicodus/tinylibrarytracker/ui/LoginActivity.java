@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        Picasso.with(this).load(R.drawable.main).fit().centerCrop().into(mMainImage);
+        Picasso.with(this).load(R.drawable.library_auth).fit().centerCrop().into(mMainImage);
 
         mAuth = FirebaseAuth.getInstance();
 

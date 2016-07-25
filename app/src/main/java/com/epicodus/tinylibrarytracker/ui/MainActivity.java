@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSearchButton.setOnClickListener(this);
         mFavoritesButton.setOnClickListener(this);
 
-        Picasso.with(this).load(R.drawable.library3).fit().centerCrop().into(mMainImage);
+        Picasso.with(this).load(R.drawable.library_tall).fit().centerCrop().into(mMainImage);
 
 //        mUserName.setText("Signed in as: " + "placeholder");
         mAuth = FirebaseAuth.getInstance();
