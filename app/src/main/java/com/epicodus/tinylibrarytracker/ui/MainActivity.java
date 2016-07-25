@@ -1,6 +1,7 @@
 package com.epicodus.tinylibrarytracker.ui;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.epicodus.tinylibrarytracker.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.searchButton) Button mSearchButton;
     @Bind(R.id.favoritesButton) Button mFavoritesButton;
 
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +43,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Picasso.with(this).load(R.drawable.library3).fit().centerCrop().into(mMainImage);
 
-        mUserName.setText("Signed in as: " + "placeholder");
+//        mUserName.setText("Signed in as: " + "placeholder");
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    mUserName.setText("Signed in as: " + user.getDisplayName());
+                } else {
 
+                }
+            }
+        };
     }
 
     @Override
     public void onClick(View v) {
         if(v == mSearchButton) {
             Intent intent = new Intent (MainActivity.this, SearchResultsActivity.class);
+            intent.putExtra("zipCode", mSearchInput.getText().toString());
             startActivity(intent);
         }
         else if (v == mFavoritesButton) {
@@ -77,5 +94,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }

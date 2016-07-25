@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.epicodus.tinylibrarytracker.R;
 
@@ -17,6 +18,8 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
     @Bind(R.id.libraryButton) Button mLibraryButton;
     @Bind(R.id.createNewButton) Button mCreateNewButton;
     @Bind(R.id.libraryList) ListView mLibraryList;
+    @Bind(R.id.textView3) TextView mTitle;
+
     private String[] libraries = new String[] {"Stephen's tardis box", "Clara's library", "Doug's book hut", "Dan's library"};
 
     @Override
@@ -27,6 +30,11 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
 
         mLibraryButton.setOnClickListener(this);
         mCreateNewButton.setOnClickListener(this);
+
+        Intent intent = getIntent();
+        int zipCode =  Integer.parseInt(intent.getStringExtra("zipCode"));
+
+        mTitle.setText("Search Results: " + zipCode);
 
         mLibraryList.setAdapter(new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, libraries));
     }
