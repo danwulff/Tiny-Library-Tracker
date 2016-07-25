@@ -25,46 +25,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/newLibraryButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_above="@+id/editText4"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Choose a Photo"
+        android:id="@+id/selectPhotoButton"
+        android:layout_below="@+id/textView5"
         android:layout_centerHorizontal="true"
-        android:hint="Zip Code" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:hint="Charter#"
-        android:layout_above="@+id/editText"
-        android:layout_centerHorizontal="true"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editText4"
-        android:hint="latitude"
-        android:layout_above="@+id/editText3"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editText3"
-        android:hint="longitude"
-        android:layout_above="@+id/newLibraryButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="10dp" />
 
     <ImageView
         android:layout_width="150dp"
@@ -73,16 +39,71 @@
         android:layout_below="@+id/selectPhotoButton"
         android:layout_centerHorizontal="true"
         android:src="@drawable/default_placeholder"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:id="@+id/charterInput"
+        android:hint="Charter#"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/placeholderImage"
+        android:layout_centerHorizontal="true"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:id="@+id/zipCodeInput"
+        android:layout_below="@+id/charterInput"
+        android:layout_centerHorizontal="true"
+        android:hint="Zip Code"
+        android:gravity="center_horizontal"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/latitudeInput"
+        android:hint="Latitude e.g. 123.45"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/zipCodeInput"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/longitudeInput"
+        android:hint="Longitude e.g. 123.45"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/latitudeInput"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Choose a Photo"
-        android:id="@+id/selectPhotoButton"
-        android:layout_below="@+id/textView5"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="Submit"
+        android:id="@+id/newLibraryButton"
+        android:layout_below="@id/longitudeInput"
+        android:layout_centerHorizontal="true" />
+
+
+
+
 
 </RelativeLayout>

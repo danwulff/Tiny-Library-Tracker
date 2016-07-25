@@ -1,5 +1,6 @@
 package com.epicodus.tinylibrarytracker.ui;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,11 +18,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.epicodus.tinylibrarytracker.Constants;
 import com.epicodus.tinylibrarytracker.R;
+import com.epicodus.tinylibrarytracker.models.Library;
 import com.epicodus.tinylibrarytracker.services.CloudinaryService;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -34,14 +40,20 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class CreateNewLibraryActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String TAG = CreateNewLibraryActivity.class.getSimpleName();
+
     @Bind(R.id.backgroundLayout) View mBackgroundLayout;
     @Bind(R.id.selectPhotoButton) Button mSelectPhotoButton;
     @Bind(R.id.newLibraryButton) Button mNewLibraryButton;
     @Bind(R.id.placeholderImage) ImageView mPlaceholderImage;
 
-    public static final String TAG = CreateNewLibraryActivity.class.getSimpleName();
+    @Bind(R.id.charterInput) EditText mCharterInput;
+    @Bind(R.id.zipCodeInput) EditText mZipCodeInput;
+    @Bind(R.id.latitudeInput) EditText mLatitudeInput;
+    @Bind(R.id.longitudeInput) EditText mLongitudeInput;
 
-
+    private DatabaseReference mLibraryReference;
+    private ProgressDialog mAuthProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +68,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
         mSelectPhotoButton.setOnClickListener(this);
         mNewLibraryButton.setOnClickListener(this);
+        createAuthProgressDialog();
     }
 
     @Override
@@ -64,17 +77,35 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             Log.d(TAG, "clicked choose a photo");
             selectImage();
         } else if (view == mNewLibraryButton) {
-            Log.d(TAG, "clicked submit");
             //check to make sure all fields having proper input
-            if(newPhotoUri != null) {
-                Log.d(TAG + " photo URI", newPhotoUri.toString());
-                createLibrary();
+            if(newPhotoUri == null) {
+                Toast.makeText(CreateNewLibraryActivity.this, "Please select a photo", Toast.LENGTH_SHORT).show();
+            }
+            else if(mCharterInput.getText().toString().length() == 0) {
+                mCharterInput.setError("Please enter a charter number");
+            }
+            else if(mZipCodeInput.getText().toString().length() != 5) {
+                mCharterInput.setError("Please enter a 5-digit Zip Code");
+            }
+            else if(mLatitudeInput.getText().toString().length() == 0) {
+                mCharterInput.setError("Please enter a latitude");
+            }
+            else if(mLongitudeInput.getText().toString().length() == 0) {
+                mCharterInput.setError("Please enter a longitude");
             }
             else {
-                //display warning, do nothing
-                Log.d(TAG, "no photoUri");
+                mAuthProgressDialog.show();
+                createLibrary();
+                mAuthProgressDialog.hide();
             }
         }
+    }
+
+    private void createAuthProgressDialog() {
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle("Loading...");
+        mAuthProgressDialog.setMessage("Creating New Library...");
+        mAuthProgressDialog.setCancelable(false);
     }
 
 
@@ -247,6 +278,14 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 String jsonData = "nope";
                 try {
                     jsonData = response.body().string();
+                    //TODO: check that jsonData saved correctly before saving to firebase
+
+                    saveLibraryToFirebase();
+
+                    Intent intent = new Intent(CreateNewLibraryActivity.this, SearchResultsActivity.class);
+                    intent.putExtra("zipCode", mZipCodeInput.getText().toString());
+                    startActivity(intent);
+
                 } catch (Exception e) {
                     e.printStackTrace();;
                 }
@@ -258,5 +297,21 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
         //eventually publish library object to firebase with photo URL from API call,
         //instead, as a placeholder, call new activity and pass url, to see url loaded from internet url
+    }
+
+    private void saveLibraryToFirebase() {
+        mLibraryReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(Constants.FIREBASE_CHILD_LIBRARIES);
+
+        int charterNumber = Integer.parseInt(mCharterInput.getText().toString());
+        int zipCode = Integer.parseInt(mZipCodeInput.getText().toString());
+        double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
+        double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
+        String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png";
+
+        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, imageUrl);
+        mLibraryReference.push().setValue(newLibrary);
     }
 }
