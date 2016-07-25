@@ -11,21 +11,19 @@ import java.util.List;
 @Parcel
 public class Library {
     String charterNumber;
-    int zipCode;
     double latitude;
     double longitude;
-    List<String> images = new ArrayList<>();
+    String image;
     private String pushId;
 
     // empty constructor needed by the Parceler library:
     public Library() {}
 
-    public Library(String charterNumber, int zipCode, double latitude, double longitude, List<String> images, String pushId) {
+    public Library(String charterNumber, double latitude, double longitude, String image, String pushId) {
         this.charterNumber = charterNumber;
-        this.zipCode = zipCode;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.images = images;
+        this.image = image;
         this.pushId = pushId;
     }
 }
