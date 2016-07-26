@@ -340,5 +340,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 .child(String.valueOf(zipCode));
 
         mZipCodeReference.push().setValue(pushId);
+
+        //TODO: Add funcionality to check if charterNumber already exists (another database reference)
     }
 }

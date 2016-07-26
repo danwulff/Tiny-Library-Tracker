@@ -18,11 +18,20 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0 results found"
+        android:id="@+id/resultQuantity"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true" />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listRecyclerView"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/resultQuantity"
         android:layout_above="@+id/createNewButton" />
 
     <Button
@@ -34,5 +43,7 @@
         android:id="@+id/createNewButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>
