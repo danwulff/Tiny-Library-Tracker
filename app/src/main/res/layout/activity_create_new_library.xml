@@ -74,7 +74,7 @@
         android:inputType="numberSigned|numberDecimal"
         android:ems="10"
         android:id="@+id/latitudeInput"
-        android:hint="Latitude e.g. 123.45"
+        android:hint="Latitude e.g. 123.4567"
         android:gravity="center_horizontal"
         android:layout_below="@+id/zipCodeInput"
         android:layout_centerHorizontal="true" />
@@ -87,7 +87,7 @@
         android:inputType="numberSigned|numberDecimal"
         android:ems="10"
         android:id="@+id/longitudeInput"
-        android:hint="Longitude e.g. 123.45"
+        android:hint="Longitude e.g. 123.4567"
         android:gravity="center_horizontal"
         android:layout_below="@+id/latitudeInput"
         android:layout_centerHorizontal="true" />
@@ -101,9 +101,4 @@
         android:id="@+id/newLibraryButton"
         android:layout_below="@id/longitudeInput"
         android:layout_centerHorizontal="true" />
-
-
-
-
-
 </RelativeLayout>

@@ -1,10 +1,14 @@
 package com.epicodus.tinylibrarytracker.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +24,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class LibraryActivity extends AppCompatActivity {
+public class LibraryActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.libraryImageView) ImageView mLibraryImage;
     @Bind(R.id.libraryCharterNumber) TextView mCharterNumber;
@@ -30,6 +34,7 @@ public class LibraryActivity extends AppCompatActivity {
     @Bind(R.id.uploadPhotoButton) Button mUploadPhoto;
 
     ArrayList<Library> mLibraries = new ArrayList<>();
+    Library library;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +45,18 @@ public class LibraryActivity extends AppCompatActivity {
         mLibraries = Parcels.unwrap(getIntent().getParcelableExtra("libraries"));
         int position = Integer.parseInt(getIntent().getStringExtra("position"));
 
-        Log.d("position", String.valueOf(position));
 
-        Library library = mLibraries.get(position);
-
+        library = mLibraries.get(position);
+        //print info
         Picasso.with(this)
                 .load(library.getImage())
                 .fit()
                 .centerCrop()
                 .into(mLibraryImage);
         mCharterNumber.setText("Charter#: " + library.getCharterNumber());
-        mLibraryAddress.setText(library.getAddress());
-
+        SpannableString content = new SpannableString(library.getAddress());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        mLibraryAddress.setText(content);
         if(library.getLatitude() >= 0.0) {
             mLatitude.setText("Latitude: " + library.getLatitude() + " N");
         } else {
@@ -62,6 +67,22 @@ public class LibraryActivity extends AppCompatActivity {
             mLongitude.setText("Longitude: " + library.getLongitude() + " E");
         } else {
             mLongitude.setText("Longitude: " + -library.getLongitude() + " W");
+        }
+
+        mLibraryAddress.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == mLibraryAddress) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            String location = "geo:" + library.getLatitude() + "," + library.getLongitude() + "?q=(" + library.getCharterNumber() + ")";
+            String location = "geo:0,0?q=" + library.getLatitude() + "," + library.getLongitude() + "(Charter%23+" + library.getCharterNumber() + ")";
+            Log.d("location string", location);
+            intent.setData(Uri.parse(location));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
         }
     }
 
