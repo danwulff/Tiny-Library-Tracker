@@ -27,6 +27,16 @@
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="No libraries were found at this Zip Code. Please consider adding a library to our system by clicking the 'Create New Library' button below"
+        android:id="@+id/noLibrariesExistTextView"
+        android:layout_below="@+id/resultQuantity"
+        android:layout_centerHorizontal="true" />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +53,7 @@
         android:id="@+id/createNewButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
 
 
 
