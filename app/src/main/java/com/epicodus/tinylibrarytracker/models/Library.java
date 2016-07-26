@@ -66,9 +66,7 @@ public class Library {
         return this.image;
     }
 
-    public String getAddress() {
-        return this.address;
-    }
+    public String getAddress() { return this.address; }
 
     public int getZipCode() {
         return this.zipCode;
@@ -77,6 +75,10 @@ public class Library {
     public int getCharterNumber() {
         return this.charterNumber;
     }
+
+    public double getLatitude() { return this.latitude; }
+
+    public double getLongitude() { return this.longitude; }
 }
 
 

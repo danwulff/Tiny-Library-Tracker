@@ -12,9 +12,81 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Library"
-        android:id="@+id/textView4"
+        android:text="Tiny Library"
+        android:id="@+id/title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/libraryImageView"
+        android:src="@drawable/placeholder"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Charter#"
+        android:id="@+id/libraryCharterNumber"
+        android:layout_below="@+id/libraryImageView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Address"
+        android:id="@+id/libraryAddress"
+        android:layout_below="@+id/libraryCharterNumber"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_below="@id/libraryAddress"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:id="@+id/linearLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Latitude"
+            android:id="@+id/latitude"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Longitude"
+            android:id="@+id/longitude"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Upload New Photo (not working)"
+        android:id="@+id/uploadPhotoButton"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
