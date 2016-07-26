@@ -1,5 +1,6 @@
 package com.epicodus.tinylibrarytracker.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
     private DatabaseReference mLibraryReference;
     private DatabaseReference mZipCodeReference;
 
+    private ProgressDialog mAuthProgressDialog;
+
     private LibraryListAdapter mListAdapter;
     private ArrayList<Library> mLibraries = new ArrayList<>();
 
@@ -45,6 +48,9 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         ButterKnife.bind(this);
+
+        createAuthProgressDialog();
+        mAuthProgressDialog.show();
 
         mNoLibrariesTextView.setVisibility(View.INVISIBLE);
         mCreateNewButton.setOnClickListener(this);
@@ -111,6 +117,8 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
                                     mLibraryList.setHasFixedSize(true);
                                 }
                             });
+
+                            mAuthProgressDialog.hide();
                         }
 
                         @Override
@@ -123,6 +131,7 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
                 else {
                     mResultsQuantity.setText("0 Results Found");
                     mNoLibrariesTextView.setVisibility(View.VISIBLE);
+                    mAuthProgressDialog.hide();
                 }
             }
 
@@ -131,5 +140,12 @@ public class SearchResultsActivity extends AppCompatActivity implements View.OnC
 
             }
         });
+    }
+
+    private void createAuthProgressDialog() {
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle("Loading...");
+        mAuthProgressDialog.setMessage("Loading Libraries from Database...");
+        mAuthProgressDialog.setCancelable(false);
     }
 }
