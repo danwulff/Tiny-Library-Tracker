@@ -73,7 +73,7 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
             zipCode = library.getZipCode();
 
             Picasso.with(mContext)
-                    .load(library.getImageUrl())
+                    .load(library.getImage())
                     .resize(MAX_WIDTH, MAX_HEIGHT)
                     .centerCrop()
                     .into(mLibraryImageView);

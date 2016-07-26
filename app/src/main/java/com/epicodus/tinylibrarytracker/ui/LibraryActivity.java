@@ -45,7 +45,7 @@ public class LibraryActivity extends AppCompatActivity {
         Library library = mLibraries.get(position);
 
         Picasso.with(this)
-                .load(library.getImageUrl())
+                .load(library.getImage())
                 .fit()
                 .centerCrop()
                 .into(mLibraryImage);

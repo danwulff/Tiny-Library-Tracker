@@ -1,12 +1,15 @@
 package com.epicodus.tinylibrarytracker.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,6 +36,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -338,7 +343,9 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
         double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
         String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png";
-        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, imageUrl);
+        String address = getAddressFromCoordinates(this, latitude, longitude);
+
+        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, address, imageUrl);
 
         DatabaseReference pushRef = mLibraryReference.push();
         String pushId = pushRef.getKey();
@@ -353,5 +360,32 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         mZipCodeReference.push().setValue(pushId);
 
         //TODO: Add funcionality to check if charterNumber already exists (another database reference)
+    }
+
+    private String getAddressFromCoordinates(Context context, double latitude, double longitude) {
+        String address = "";
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                address = strReturnedAddress.toString();
+            }
+            else {
+//                address = "no address";
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            address = "could not get address";
+        }
+
+        return address;
     }
 }

@@ -48,7 +48,8 @@
         android:text="Address"
         android:id="@+id/libraryAddress"
         android:layout_below="@+id/libraryCharterNumber"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
