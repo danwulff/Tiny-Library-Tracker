@@ -1,6 +1,7 @@
 package com.epicodus.tinylibrarytracker.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.TextView;
 
 import com.epicodus.tinylibrarytracker.R;
 import com.epicodus.tinylibrarytracker.models.Library;
+import com.epicodus.tinylibrarytracker.ui.LibraryActivity;
+import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -33,19 +38,19 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
 
     @Override
     public LibraryListAdapter.LibraryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.restaurant_list_item, parent, false);
-        RestaurantViewHolder viewHolder = new RestaurantViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.library_list_item, parent, false);
+        LibraryViewHolder viewHolder = new LibraryViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(LibraryListAdapter.LibraryViewHolder holder, int position) {
-        holder.bindRestaurant(mRestaurants.get(position));
+        holder.bindLibrary(mLibraries.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mRestaurants.size();
+        return mLibraries.size();
     }
 
     public class LibraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -56,31 +61,31 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
 
         private Context mContext;
 
-        public RestaurantViewHolder(View itemView) {
+        public LibraryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             mContext = itemView.getContext();
             itemView.setOnClickListener(this);
         }
 
-        public void bindRestaurant(Restaurant restaurant) {
+        public void bindLibrary(Library library) {
             Picasso.with(mContext)
-                    .load(restaurant.getImageUrl())
+                    .load(library.getImageUrl())
                     .resize(MAX_WIDTH, MAX_HEIGHT)
                     .centerCrop()
                     .into(mRestaurantImageView);
 
-            mNameTextView.setText(restaurant.getName());
-            mCategoryTextView.setText(restaurant.getCategories().get(0));
-            mRatingTextView.setText("Rating: " + restaurant.getRating() + "/5");
+            mNameTextView.setText(library.getName());
+            mCategoryTextView.setText(library.getCategories().get(0));
+            mRatingTextView.setText("Rating: " + library.getRating() + "/5");
         }
 
         @Override
         public void onClick(View view) {
             int itemPosition = getLayoutPosition();
-            Intent intent = new Intent(mContext, RestaurantDetailActivity.class);
+            Intent intent = new Intent(mContext, LibraryActivity.class);
             intent.putExtra("position", itemPosition + "");
-            intent.putExtra("restaurants", Parcels.wrap(mRestaurants));
+            intent.putExtra("restaurants", Parcels.wrap(mLibraries));
             mContext.startActivity(intent);
         }
     }
