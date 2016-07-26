@@ -5,9 +5,6 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by danielwulff on 7/20/16.
- */
 @Parcel
 public class Library {
     int charterNumber;
@@ -63,6 +60,22 @@ public class Library {
         } */
 
         return "address tbd";
+    }
+
+    public String getImageUrl() {
+        return this.image;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public int getZipCode() {
+        return this.zipCode;
+    }
+
+    public int getCharterNumber() {
+        return this.charterNumber;
     }
 }
 

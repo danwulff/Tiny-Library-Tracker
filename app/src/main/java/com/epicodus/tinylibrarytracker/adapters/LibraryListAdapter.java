@@ -54,12 +54,13 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
     }
 
     public class LibraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(R.id.restaurantImageView) ImageView mRestaurantImageView;
-        @Bind(R.id.restaurantNameTextView) TextView mNameTextView;
-        @Bind(R.id.categoryTextView) TextView mCategoryTextView;
-        @Bind(R.id.ratingTextView) TextView mRatingTextView;
+        @Bind(R.id.libraryImageView) ImageView mLibraryImageView;
+        @Bind(R.id.libraryAddress) TextView mLibraryAddress;
+        @Bind(R.id.libraryCharterNumber) TextView mLibraryCharterNumber;
+        @Bind(R.id.libraryZipCode) TextView mLibraryZipCode;
 
         private Context mContext;
+        private int zipCode;
 
         public LibraryViewHolder(View itemView) {
             super(itemView);
@@ -69,23 +70,26 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
         }
 
         public void bindLibrary(Library library) {
+            zipCode = library.getZipCode();
+
             Picasso.with(mContext)
                     .load(library.getImageUrl())
                     .resize(MAX_WIDTH, MAX_HEIGHT)
                     .centerCrop()
-                    .into(mRestaurantImageView);
+                    .into(mLibraryImageView);
 
-            mNameTextView.setText(library.getName());
-            mCategoryTextView.setText(library.getCategories().get(0));
-            mRatingTextView.setText("Rating: " + library.getRating() + "/5");
+            mLibraryAddress.setText(library.getAddress());
+            mLibraryCharterNumber.setText(String.valueOf(library.getCharterNumber()));
+            mLibraryZipCode.setText("Zip Code: " + library.getZipCode());
         }
 
         @Override
         public void onClick(View view) {
             int itemPosition = getLayoutPosition();
             Intent intent = new Intent(mContext, LibraryActivity.class);
+            intent.putExtra("zipCode", String.valueOf(zipCode));
             intent.putExtra("position", itemPosition + "");
-            intent.putExtra("restaurants", Parcels.wrap(mLibraries));
+            intent.putExtra("libraries", Parcels.wrap(mLibraries));
             mContext.startActivity(intent);
         }
     }
