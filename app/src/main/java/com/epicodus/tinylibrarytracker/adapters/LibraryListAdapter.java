@@ -57,7 +57,6 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
         @Bind(R.id.libraryImageView) ImageView mLibraryImageView;
         @Bind(R.id.libraryAddress) TextView mLibraryAddress;
         @Bind(R.id.libraryCharterNumber) TextView mLibraryCharterNumber;
-        @Bind(R.id.libraryZipCode) TextView mLibraryZipCode;
 
         private Context mContext;
         private int zipCode;
@@ -80,7 +79,6 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
 
             mLibraryAddress.setText(library.getAddress());
             mLibraryCharterNumber.setText("Charter#: " + String.valueOf(library.getCharterNumber()));
-            mLibraryZipCode.setText("Zip Code: " + library.getZipCode());
         }
 
         @Override
