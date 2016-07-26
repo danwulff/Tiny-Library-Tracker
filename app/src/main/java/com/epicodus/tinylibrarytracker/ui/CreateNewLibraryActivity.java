@@ -53,6 +53,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     @Bind(R.id.longitudeInput) EditText mLongitudeInput;
 
     private DatabaseReference mLibraryReference;
+    private DatabaseReference mZipCodeReference;
     private ProgressDialog mAuthProgressDialog;
 
     @Override
@@ -287,7 +288,8 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                     startActivity(intent);
 
                 } catch (Exception e) {
-                    e.printStackTrace();;
+                    e.printStackTrace();
+                    //TODO: add dialogue if creation failed
                 }
 
                 Log.d(TAG + "onResponse ", jsonData);
@@ -300,6 +302,21 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     }
 
     private void saveLibraryToFirebase() {
+        //works to upload library, save as reference
+//        mLibraryReference = FirebaseDatabase
+//                .getInstance()
+//                .getReference()
+//                .child(Constants.FIREBASE_CHILD_LIBRARIES);
+//
+//        int charterNumber = Integer.parseInt(mCharterInput.getText().toString());
+//        int zipCode = Integer.parseInt(mZipCodeInput.getText().toString());
+//        double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
+//        double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
+//        String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png";
+//        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, imageUrl);
+//
+//        mLibraryReference.push().setValue(newLibrary);
+
         mLibraryReference = FirebaseDatabase
                 .getInstance()
                 .getReference()
@@ -310,8 +327,18 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
         double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
         String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png";
-
         Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, imageUrl);
-        mLibraryReference.push().setValue(newLibrary);
+
+        DatabaseReference pushRef = mLibraryReference.push();
+        String pushId = pushRef.getKey();
+        newLibrary.setPushId(pushId);
+        pushRef.setValue(newLibrary);
+
+        mZipCodeReference = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHILD_ZIPCODES)
+                .child(String.valueOf(zipCode));
+
+        mZipCodeReference.push().setValue(pushId);
     }
 }

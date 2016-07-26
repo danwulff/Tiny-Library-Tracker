@@ -14,6 +14,7 @@ public class Library {
     int zipCode;
     double latitude;
     double longitude;
+    String address;
     String image;
     private String pushId;
 
@@ -26,6 +27,44 @@ public class Library {
         this.latitude = latitude;
         this.longitude = longitude;
         this.image = image;
+        this.address = getAddressFromCoordinates(this.latitude, this.longitude);
+    }
+
+    public void setPushId(String id) {
+        this.pushId = id;
+    }
+
+    public String getPushId() {
+        return this.pushId;
+    }
+
+
+    private String getAddressFromCoordinates(double latitude, double longitude) {
+        /*Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("");
+                }
+                et_lugar.setText(strReturnedAddress.toString());
+            }
+            else {
+                et_lugar.setText("No Address returned!");
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            et_lugar.setText("Canont get Address!");
+        } */
+
+        return "address tbd";
     }
 }
+
+
 
