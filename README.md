@@ -8,6 +8,12 @@
 
 This is an android studio project, still in development. The goal of this project is to provide an app for users to lookup and track 'Tiny Libraries' (search with google to find some examples) within neighborhoods. The goal is to provide google map locations, user registration of libraries and user photo uploads to provide up to date information about the status of said libraries.
 
+Features to be added soon&trade;
+*Fix photo uploader (placeholder images currently present)
+*use geofire for promixity searching
+*add automated longitude/latitude 'getter' for create library activity
+*add map visualization/searches
+
 ## Setup/Installation Requirements
 
 * _In a terminal navigate to a directory you'd like to place the project folder and type $ git clone https://github.com/danwulff/Tiny-Library-Tracker_
