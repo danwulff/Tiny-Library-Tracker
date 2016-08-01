@@ -13,6 +13,7 @@ Features to be added soon&trade;
 * use geofire for promixity searching
 * add automated longitude/latitude 'getter' for create library activity
 * add map visualization/searches
+* user 'favorites' list
 
 ## Setup/Installation Requirements
 
