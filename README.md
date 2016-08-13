@@ -1,4 +1,4 @@
-# _Tiny Library Tracker_
+# _Tiny Library Tracker (in progress)_
 
 #### _Daniel Wulff's Tiny Library Tracker, July 1st, 2016_
 
