@@ -1,5 +1,6 @@
 package com.epicodus.tinylibrarytracker.ui;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -18,9 +20,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +36,9 @@ import com.epicodus.tinylibrarytracker.Constants;
 import com.epicodus.tinylibrarytracker.R;
 import com.epicodus.tinylibrarytracker.models.Library;
 import com.epicodus.tinylibrarytracker.services.CloudinaryService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -48,7 +55,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class CreateNewLibraryActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateNewLibraryActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public static final String TAG = CreateNewLibraryActivity.class.getSimpleName();
 
     @Bind(R.id.backgroundLayout) View mBackgroundLayout;
@@ -61,6 +68,9 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     @Bind(R.id.zipCodeInput) EditText mZipCodeInput;
     @Bind(R.id.latitudeInput) EditText mLatitudeInput;
     @Bind(R.id.longitudeInput) EditText mLongitudeInput;
+
+    private GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
 
     private DatabaseReference mLibraryReference;
     private DatabaseReference mZipCodeReference;
@@ -77,11 +87,22 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         Drawable background = backgroundimage.getBackground();
         background.setAlpha(80);
 
-//        mZipCodeInput.setVisibility(View.GONE);
-//        mLatitudeInput.setVisibility(View.GONE);
-//        mLongitudeInput.setVisibility(View.GONE);
-
+        //hide input forms for drop down menu use
+        mZipCodeInput.setVisibility(View.GONE);
+        mLatitudeInput.setVisibility(View.GONE);
+        mLongitudeInput.setVisibility(View.GONE);
+        //build spinner
         addItemsOnSpinner(mLocationSpinner);
+        mLocationSpinner.setOnItemSelectedListener(this);
+
+        //google api client
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         mSelectPhotoButton.setOnClickListener(this);
         mNewLibraryButton.setOnClickListener(this);
@@ -100,6 +121,28 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+        String selected = parent.getItemAtPosition(position).toString();
+        if(selected == "Select One:") {
+            Toast.makeText(parent.getContext(), "do nothing", Toast.LENGTH_SHORT).show();
+        } else if (selected == "Enter Address") {
+            getAddressPrompt(this);
+        } else if (selected == "Get Current Location") {
+            //calls google services
+            mGoogleApiClient.connect();
+
+        } else if (selected == "Enter Lat. Long.") {
+            Toast.makeText(parent.getContext(), "enter lat long", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        //do nothing
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -148,11 +191,126 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         return (super.onOptionsItemSelected(menuItem));
     }
 
+    //----------------------------------------------------------------------------------------------
+    //getCoordinates from address
+    //-----------
+
+    public void getAddressPrompt(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter an Address");
+
+
+        // Set up the input
+        final EditText input = new EditText(context);
+        // Specify the type of input expected
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String address = input.getText().toString();
+                if(address != null) {
+                    getCoordinatesFromAddress(context, address);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void getCoordinatesFromAddress(Context context, String address) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(address, 1);
+
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                //get zip code and coordinates from address
+                mZipCodeInput.setText(returnedAddress.getPostalCode());
+                mLatitudeInput.setText(String.valueOf(returnedAddress.getLatitude()));
+                mLongitudeInput.setText(String.valueOf(returnedAddress.getLongitude()));
+
+                mZipCodeInput.setVisibility(View.VISIBLE);
+                mLatitudeInput.setVisibility(View.VISIBLE);
+                mLongitudeInput.setVisibility(View.VISIBLE);
+            }
+            else {
+                //address = "no address";
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+
+
+    //----------------------------------------------------------------------------------------------
+    //getCurrentLocation
+    //-----------
+
+    @Override
+    public void onConnectionFailed(ConnectionResult arg0) {
+        Toast.makeText(this, "Failed to connect...", Toast.LENGTH_SHORT).show();
+    }
+
+    static final int MY_PERMISSIONS_REQUEST_USE_FINE_LOCATION = 100;
+
+    @Override
+    public void onConnected(Bundle arg0) {
+        int permissionCheck = ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if(permissionCheck == PackageManager.PERMISSION_DENIED) {
+            Log.d(TAG, "permission denied, ask for permission");
+            // Here, thisActivity is the current activity
+            if (ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(CreateNewLibraryActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(CreateNewLibraryActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_USE_FINE_LOCATION);
+                }
+            }
+        } else if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            getCurrentLocation();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        Toast.makeText(this, "Connection suspended...", Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void getCurrentLocation() {
+        if (mLastLocation != null) {
+            //done getting location
+            mGoogleApiClient.disconnect();
+            Toast.makeText(this, "Last Latitude: " + String.valueOf(mLastLocation.getLatitude()) + "Last Longitude: " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+            //reveal zip code and lat long fields
+
+            //insert info into fields
+        }
+    }
 
     //----------------------------------------------------------------------------------------------
     //selectImage
     //-----------
-    static final int MY_PERMISSIONS_REQUEST_USE_EXTERNAL = 100;
+    static final int MY_PERMISSIONS_REQUEST_USE_EXTERNAL = 101;
 
     private void selectImage() {
         final CharSequence[] items = {"Take Photo", "Choose from Library", "cancel"};
@@ -214,6 +372,24 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     dispatchTakePictureIntent();
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_USE_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //appease the android gods
+                    int permissionCheck = ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+                    if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        getCurrentLocation();
+                    }
 
                 } else {
                     // permission denied, boo! Disable the
