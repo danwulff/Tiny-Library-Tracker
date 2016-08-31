@@ -21,9 +21,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.epicodus.tinylibrarytracker.Constants;
@@ -36,6 +38,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,6 +57,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     @Bind(R.id.placeholderImage) ImageView mPlaceholderImage;
 
     @Bind(R.id.charterInput) EditText mCharterInput;
+    @Bind(R.id.locationSpinner) Spinner mLocationSpinner;
     @Bind(R.id.zipCodeInput) EditText mZipCodeInput;
     @Bind(R.id.latitudeInput) EditText mLatitudeInput;
     @Bind(R.id.longitudeInput) EditText mLongitudeInput;
@@ -73,9 +77,28 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         Drawable background = backgroundimage.getBackground();
         background.setAlpha(80);
 
+//        mZipCodeInput.setVisibility(View.GONE);
+//        mLatitudeInput.setVisibility(View.GONE);
+//        mLongitudeInput.setVisibility(View.GONE);
+
+        addItemsOnSpinner(mLocationSpinner);
+
         mSelectPhotoButton.setOnClickListener(this);
         mNewLibraryButton.setOnClickListener(this);
         createAuthProgressDialog();
+    }
+
+    // add items into spinner dynamically
+    public void addItemsOnSpinner(android.widget.Spinner spinner) {
+        List<String> list = new ArrayList<String>();
+        list.add("Select One:");
+        list.add("Enter Address");
+        list.add("Get Current Location");
+        list.add("Enter Lat. Long.");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
     }
 
     @Override
