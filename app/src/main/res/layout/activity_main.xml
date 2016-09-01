@@ -62,7 +62,18 @@
         android:text="Search"
         android:id="@+id/searchButton"
         android:layout_below="@+id/searchInput"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="Find Near Me"
+        android:id="@+id/nearMeButton"
         android:layout_marginBottom="24dp"
+        android:layout_below="@id/searchButton"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -72,7 +83,7 @@
         android:layout_marginRight="50dp"
         android:text="Favorites"
         android:id="@+id/favoritesButton"
-        android:layout_below="@id/searchButton"
+        android:layout_below="@id/nearMeButton"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

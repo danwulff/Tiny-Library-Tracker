@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.userName) TextView mUserName;
     @Bind(R.id.searchInput) EditText mSearchInput;
     @Bind(R.id.searchButton) Button mSearchButton;
+    @Bind(R.id.nearMeButton) Button mNearMeButton;
     @Bind(R.id.favoritesButton) Button mFavoritesButton;
 
     private FirebaseAuth mAuth;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         mSearchButton.setOnClickListener(this);
+        mNearMeButton.setOnClickListener(this);
         mFavoritesButton.setOnClickListener(this);
 
         Picasso.with(this).load(R.drawable.library_tall).fit().centerCrop().into(mMainImage);
@@ -72,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("zipCode", mSearchInput.getText().toString());
                 startActivity(intent);
             }
+        }
+        else if (v == mNearMeButton) {
+            Intent intent = new Intent (MainActivity.this, GeofireResultsActivity.class);
+            startActivity(intent);
         }
         else if (v == mFavoritesButton) {
             Intent intent = new Intent (MainActivity.this, FavoriteLibrariesActivity.class);
