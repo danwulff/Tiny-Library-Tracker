@@ -41,9 +41,13 @@ import com.epicodus.tinylibrarytracker.R;
 import com.epicodus.tinylibrarytracker.models.Library;
 import com.epicodus.tinylibrarytracker.services.CloudinaryService;
 import com.epicodus.tinylibrarytracker.services.CloudinaryServicev2;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -571,8 +575,22 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 .child(String.valueOf(zipCode));
         mZipCodeReference.push().setValue(pushId);
 
-        mAuthProgressDialog.hide();
+        //geofire reference upload
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_GEOFIRE);
+        GeoFire geoFire = new GeoFire(ref);
 
-        //TODO: create reference for geofire searching
+        geoFire.setLocation(pushId, new GeoLocation(latitude, longitude), new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+                if (error != null) {
+                    Log.d("goefire: ", "error");
+                } else {
+                    Log.d("goefire: ", "saved");
+                }
+            }
+        });
+
+
+        mAuthProgressDialog.hide();
     }
 }
