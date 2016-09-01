@@ -51,19 +51,37 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
             android:id="@+id/charterInput"
-            android:hint="Charter#"
+            android:hint="Charter# (optional)"
             android:gravity="center_horizontal"
             android:layout_below="@+id/placeholderImage"
             android:layout_centerHorizontal="true"
             android:inputType="number" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Choose a location"
+            android:id="@+id/textView"
+            android:layout_below="@+id/charterInput"
+            android:layout_centerHorizontal="true"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryText" />
+
         <Spinner
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
             android:id="@+id/locationSpinner"
             android:gravity="center"
-            android:layout_below="@+id/charterInput"
+            android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true" />
 
         <EditText
@@ -71,8 +89,22 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:id="@+id/zipCodeInput"
+            android:layout_marginTop="10dp"
+            android:id="@+id/addressInput"
             android:layout_below="@+id/locationSpinner"
+            android:layout_centerHorizontal="true"
+            android:hint="Address"
+            android:gravity="center_horizontal"
+            android:inputType="text" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/zipCodeInput"
+            android:layout_below="@+id/addressInput"
             android:layout_centerHorizontal="true"
             android:hint="Zip Code"
             android:gravity="center_horizontal"
@@ -81,6 +113,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/zipCodeInput"
             android:id="@+id/coordinates"
             android:weightSum="100">
@@ -118,6 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
             android:text="Submit"
             android:id="@+id/newLibraryButton"
             android:layout_below="@id/coordinates"

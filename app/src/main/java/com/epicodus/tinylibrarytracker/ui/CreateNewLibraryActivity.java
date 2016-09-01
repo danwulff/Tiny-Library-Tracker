@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +66,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
     @Bind(R.id.charterInput) EditText mCharterInput;
     @Bind(R.id.locationSpinner) Spinner mLocationSpinner;
+    @Bind(R.id.addressInput) EditText mAddressInput;
     @Bind(R.id.zipCodeInput) EditText mZipCodeInput;
     @Bind(R.id.latitudeInput) EditText mLatitudeInput;
     @Bind(R.id.longitudeInput) EditText mLongitudeInput;
@@ -88,6 +90,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         background.setAlpha(80);
 
         //hide input forms for drop down menu use
+        mAddressInput.setVisibility(View.GONE);
         mZipCodeInput.setVisibility(View.GONE);
         mLatitudeInput.setVisibility(View.GONE);
         mLongitudeInput.setVisibility(View.GONE);
@@ -115,7 +118,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         list.add("Select One:");
         list.add("Enter Address");
         list.add("Get Current Location");
-        list.add("Enter Lat. Long.");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -126,15 +128,12 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         String selected = parent.getItemAtPosition(position).toString();
         if(selected == "Select One:") {
-            Toast.makeText(parent.getContext(), "do nothing", Toast.LENGTH_SHORT).show();
+            //do nothing
         } else if (selected == "Enter Address") {
             getAddressPrompt(this);
         } else if (selected == "Get Current Location") {
             //calls google services
             mGoogleApiClient.connect();
-
-        } else if (selected == "Enter Lat. Long.") {
-            Toast.makeText(parent.getContext(), "enter lat long", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -211,8 +210,10 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String address = input.getText().toString();
-                if(address != null) {
+                if(!TextUtils.isEmpty(address)) {
                     getCoordinatesFromAddress(context, address);
+                } else {
+                    noAddressDialog(context);
                 }
             }
         });
@@ -232,24 +233,44 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         try {
             List<Address> addresses = geocoder.getFromLocationName(address, 1);
 
-            if (addresses != null) {
+            if (addresses != null && addresses.size() > 0) {
                 Address returnedAddress = addresses.get(0);
                 //get zip code and coordinates from address
+                mAddressInput.setText(returnedAddress.getAddressLine(0) + " " + returnedAddress.getLocality() +  " " + returnedAddress.getAdminArea());
                 mZipCodeInput.setText(returnedAddress.getPostalCode());
                 mLatitudeInput.setText(String.valueOf(returnedAddress.getLatitude()));
                 mLongitudeInput.setText(String.valueOf(returnedAddress.getLongitude()));
 
+                mAddressInput.setVisibility(View.VISIBLE);
                 mZipCodeInput.setVisibility(View.VISIBLE);
                 mLatitudeInput.setVisibility(View.VISIBLE);
                 mLongitudeInput.setVisibility(View.VISIBLE);
             }
             else {
-                //address = "no address";
+               noAddressDialog(context);
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public void noAddressDialog(Context context) {
+        //alert user to none address
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("No Address Was Found");
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mLocationSpinner.setSelection(0);
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog noAddressAlert = builder.create();
+        noAddressAlert.show();
     }
 
 
