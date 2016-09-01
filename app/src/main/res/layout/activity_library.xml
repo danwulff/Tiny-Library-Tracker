@@ -82,13 +82,23 @@
     </LinearLayout>
 
     <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:text="Upload New Photo (not finished)"
+    android:id="@+id/uploadPhotoButton"
+    android:layout_below="@+id/linearLayout"
+    android:layout_centerHorizontal="true" />
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Upload New Photo (not working)"
-        android:id="@+id/uploadPhotoButton"
-        android:layout_below="@+id/linearLayout"
+        android:text="Save to Favorites"
+        android:id="@+id/addFavoriteButton"
+        android:layout_below="@+id/uploadPhotoButton"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

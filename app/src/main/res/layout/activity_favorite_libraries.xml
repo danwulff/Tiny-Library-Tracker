@@ -7,14 +7,42 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ui.FavoriteLibrariesActivity">
+    tools:context=".ui.SearchResultsActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Favorites"
-        android:id="@+id/textView6"
+        android:id="@+id/title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0 results found"
+        android:id="@+id/resultQuantity"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textSize="18dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="No libraries are saved in your favorites.\n\nFind a library you like and clicke the 'Save to Favorites' Button to add it to this list."
+        android:id="@+id/noLibrariesExistTextView"
+        android:layout_below="@+id/resultQuantity"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listRecyclerView"
+        android:layout_below="@+id/resultQuantity"
+        android:layout_above="@+id/createNewButton" />
 </RelativeLayout>

@@ -535,54 +535,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             intent.putExtra("zipCode", mZipCodeInput.getText().toString());
             startActivity(intent);
         }
-
-
-
-        /*Log.d(TAG, "createLibrary()");
-        //for now, upload photo to api
-        final CloudinaryService cloudinaryService = new CloudinaryService();
-
-        //move bitmap conversion to here from service to reduce cpu load on thread
-        // image, convert to Base64 string
-        Log.d("create library", "bitmapfactory.decodefile");
-        Bitmap img = BitmapFactory.decodeFile(newPhotoUri.toString().replace("file:", ""));
-
-        Log.d("create library", "cloudinaryservice.convertbitmaptoString()");
-        String imgString = CloudinaryService.convertBitmapToString(img);
-
-        Log.d("create library", "upload photo");
-        cloudinaryService.uploadPhoto(imgString, new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                String jsonData = "nope";
-                try {
-                    jsonData = response.body().string();
-                    //TODO: check that jsonData saved correctly before saving to firebase
-
-                    saveLibraryToFirebase("https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png");
-
-                    Intent intent = new Intent(CreateNewLibraryActivity.this, SearchResultsActivity.class);
-                    intent.putExtra("zipCode", mZipCodeInput.getText().toString());
-                    startActivity(intent);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    //TODO: add dialogue if creation failed
-                }
-
-                Log.d(TAG + "onResponse ", jsonData);
-            }
-        });*/
-
-
-        //eventually publish library object to firebase with photo URL from API call,
-        //instead, as a placeholder, call new activity and pass url, to see url loaded from internet url
     }
 
     private void saveLibraryToFirebase(String imageUrl) {
