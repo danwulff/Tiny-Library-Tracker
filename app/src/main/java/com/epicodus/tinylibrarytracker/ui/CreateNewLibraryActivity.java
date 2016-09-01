@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epicodus.tinylibrarytracker.Constants;
@@ -146,24 +147,39 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     @Override
     public void onClick(View view) {
         if(view == mSelectPhotoButton){
-            Log.d(TAG, "clicked choose a photo");
-            selectImage();
+            takeImage();
         } else if (view == mNewLibraryButton) {
             //check to make sure all fields having proper input
             if(newPhotoUri == null) {
-                Toast.makeText(CreateNewLibraryActivity.this, "Please select a photo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateNewLibraryActivity.this, "Please Take a Photo", Toast.LENGTH_LONG).show();
             }
-            else if(mCharterInput.getText().toString().length() == 0) {
-                mCharterInput.setError("Please enter a charter number");
+            else if(mAddressInput.getText().toString().length() == 0 && mAddressInput.getText().toString() != "Address") {
+                if(mAddressInput.isShown()) {
+                    mAddressInput.setError("Please enter an Address");
+                } else {
+                    Toast.makeText(CreateNewLibraryActivity.this, "Please Choose a Location", Toast.LENGTH_LONG).show();
+                }
             }
-            else if(mZipCodeInput.getText().toString().length() != 5) {
-                mCharterInput.setError("Please enter a 5-digit Zip Code");
+            else if(mZipCodeInput.getText().toString().length() != 5 && mZipCodeInput.getText().toString() != "Zip Code") {
+                if(mZipCodeInput.isShown()) {
+                    mZipCodeInput.setError("Please enter a 5-digit Zip Code");
+                } else {
+                    Toast.makeText(CreateNewLibraryActivity.this, "Please Choose a Location", Toast.LENGTH_LONG).show();
+                }
             }
-            else if(mLatitudeInput.getText().toString().length() == 0) {
-                mCharterInput.setError("Please enter a latitude");
+            else if(mLatitudeInput.getText().toString().length() == 0 && mLatitudeInput.getText().toString() != "Latitude") {
+                if(mLatitudeInput.isShown()) {
+                    mLatitudeInput.setError("Please enter a latitude");
+                } else {
+                    Toast.makeText(CreateNewLibraryActivity.this, "Please Choose a Location", Toast.LENGTH_LONG).show();
+                }
             }
-            else if(mLongitudeInput.getText().toString().length() == 0) {
-                mCharterInput.setError("Please enter a longitude");
+            else if(mLongitudeInput.getText().toString().length() == 0 && mLongitudeInput.getText().toString() != "Longitude") {
+                if(mLongitudeInput.isShown()) {
+                    mLongitudeInput.setError("Please enter a longitude");
+                } else {
+                    Toast.makeText(CreateNewLibraryActivity.this, "Please Choose a Location", Toast.LENGTH_LONG).show();
+                }
             }
             else {
                 mAuthProgressDialog.show();
@@ -220,6 +236,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mLocationSpinner.setSelection(0);
                 dialog.cancel();
             }
         });
@@ -235,16 +252,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
             if (addresses != null && addresses.size() > 0) {
                 Address returnedAddress = addresses.get(0);
-                //get zip code and coordinates from address
-                mAddressInput.setText(returnedAddress.getAddressLine(0) + " " + returnedAddress.getLocality() +  " " + returnedAddress.getAdminArea());
-                mZipCodeInput.setText(returnedAddress.getPostalCode());
-                mLatitudeInput.setText(String.valueOf(returnedAddress.getLatitude()));
-                mLongitudeInput.setText(String.valueOf(returnedAddress.getLongitude()));
-
-                mAddressInput.setVisibility(View.VISIBLE);
-                mZipCodeInput.setVisibility(View.VISIBLE);
-                mLatitudeInput.setVisibility(View.VISIBLE);
-                mLongitudeInput.setVisibility(View.VISIBLE);
+                setFields(returnedAddress);
             }
             else {
                noAddressDialog(context);
@@ -272,7 +280,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         AlertDialog noAddressAlert = builder.create();
         noAddressAlert.show();
     }
-
 
 
     //----------------------------------------------------------------------------------------------
@@ -322,10 +329,39 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             //done getting location
             mGoogleApiClient.disconnect();
             Toast.makeText(this, "Last Latitude: " + String.valueOf(mLastLocation.getLatitude()) + "Last Longitude: " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
-            //reveal zip code and lat long fields
 
-            //insert info into fields
+            Geocoder geocoder = new Geocoder(CreateNewLibraryActivity.this, Locale.getDefault());
+
+            try {
+                List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+
+                if (addresses != null && addresses.size() > 0) {
+                    Address returnedAddress = addresses.get(0);
+                    setFields(returnedAddress);
+                }
+                else {
+                    noAddressDialog(CreateNewLibraryActivity.this);
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         }
+    }
+
+    public void setFields(Address address) {
+        mAddressInput.setText(address.getAddressLine(0) + " " + address.getLocality() +  " " + address.getAdminArea());
+        mZipCodeInput.setText(address.getPostalCode());
+        mLatitudeInput.setText(String.valueOf(address.getLatitude()));
+        mLongitudeInput.setText(String.valueOf(address.getLongitude()));
+
+        mAddressInput.setVisibility(View.VISIBLE);
+        mZipCodeInput.setVisibility(View.VISIBLE);
+        mLatitudeInput.setVisibility(View.VISIBLE);
+        mLongitudeInput.setVisibility(View.VISIBLE);
+
+        mLocationSpinner.setSelection(0);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -333,53 +369,29 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     //-----------
     static final int MY_PERMISSIONS_REQUEST_USE_EXTERNAL = 101;
 
-    private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library", "cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateNewLibraryActivity.this);
-        builder.setTitle("Select a Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    Log.d(TAG, "take photo chosen");
-                    int permissionCheck = ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    if(permissionCheck == PackageManager.PERMISSION_DENIED) {
-                        Log.d(TAG, "permission denied, ask for permission");
-                        // Here, thisActivity is the current activity
-                        if (ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this,
-                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                != PackageManager.PERMISSION_GRANTED) {
+    private void takeImage() {
+            Log.d(TAG, "take photo chosen");
+            int permissionCheck = ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if(permissionCheck == PackageManager.PERMISSION_DENIED) {
+                Log.d(TAG, "permission denied, ask for permission");
+                // Here, thisActivity is the current activity
+                if (ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                            // Should we show an explanation?
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(CreateNewLibraryActivity.this,
-                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                                // Show an expanation to the user *asynchronously* -- don't block
-                                // this thread waiting for the user's response! After the user
-                                // sees the explanation, try again to request the permission.
-
-                            } else {
-                                // No explanation needed, we can request the permission.
-                                ActivityCompat.requestPermissions(CreateNewLibraryActivity.this,
-                                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        MY_PERMISSIONS_REQUEST_USE_EXTERNAL);
-
-                                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                                // app-defined int constant. The callback method gets the
-                                // result of the request.
-                            }
-                        }
-                    } else if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                        dispatchTakePictureIntent();
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(CreateNewLibraryActivity.this,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    } else {
+                        // No explanation needed, we can request the permission.
+                        ActivityCompat.requestPermissions(CreateNewLibraryActivity.this,
+                                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                MY_PERMISSIONS_REQUEST_USE_EXTERNAL);
                     }
-                } else if (items[item].equals("Choose from Library")) {
-                    Log.d(TAG, "choose from library chosen");
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
                 }
+            } else if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
             }
-        });
-        builder.show();
     }
 
     @Override
@@ -389,9 +401,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+                    // permission was granted, yay!
                     dispatchTakePictureIntent();
 
                 } else {
@@ -411,7 +421,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                         getCurrentLocation();
                     }
-
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
