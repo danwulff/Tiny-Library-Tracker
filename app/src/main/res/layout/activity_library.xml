@@ -86,7 +86,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    android:text="Upload New Photo (not finished)"
+    android:text="Upload New Photo"
     android:id="@+id/uploadPhotoButton"
     android:layout_below="@+id/linearLayout"
     android:layout_centerHorizontal="true" />

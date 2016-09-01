@@ -11,7 +11,7 @@
         android:src="@drawable/placeholder"
         android:scaleType="centerCrop"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="#ffffff"
@@ -19,8 +19,9 @@
         android:padding="10dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:layout_weight="0.7"
             android:id="@+id/libraryAddress"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -30,12 +31,13 @@
             android:layout_alignParentLeft="true" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:layout_weight="0.3"
             android:text="Charter Number"
             android:id="@+id/libraryCharterNumber"
             android:textStyle="italic"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true" />
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>
