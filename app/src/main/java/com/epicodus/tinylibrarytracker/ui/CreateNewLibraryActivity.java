@@ -206,6 +206,20 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         return (super.onOptionsItemSelected(menuItem));
     }
 
+    public void setFields(Address address) {
+        mAddressInput.setText(address.getAddressLine(0) + " " + address.getLocality() +  " " + address.getAdminArea());
+        mZipCodeInput.setText(address.getPostalCode());
+        mLatitudeInput.setText(String.valueOf(address.getLatitude()));
+        mLongitudeInput.setText(String.valueOf(address.getLongitude()));
+
+        mAddressInput.setVisibility(View.VISIBLE);
+        mZipCodeInput.setVisibility(View.VISIBLE);
+        mLatitudeInput.setVisibility(View.VISIBLE);
+        mLongitudeInput.setVisibility(View.VISIBLE);
+
+        mLocationSpinner.setSelection(0);
+    }
+
     //----------------------------------------------------------------------------------------------
     //getCoordinates from address
     //-----------
@@ -350,30 +364,16 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         }
     }
 
-    public void setFields(Address address) {
-        mAddressInput.setText(address.getAddressLine(0) + " " + address.getLocality() +  " " + address.getAdminArea());
-        mZipCodeInput.setText(address.getPostalCode());
-        mLatitudeInput.setText(String.valueOf(address.getLatitude()));
-        mLongitudeInput.setText(String.valueOf(address.getLongitude()));
 
-        mAddressInput.setVisibility(View.VISIBLE);
-        mZipCodeInput.setVisibility(View.VISIBLE);
-        mLatitudeInput.setVisibility(View.VISIBLE);
-        mLongitudeInput.setVisibility(View.VISIBLE);
-
-        mLocationSpinner.setSelection(0);
-    }
 
     //----------------------------------------------------------------------------------------------
-    //selectImage
+    //Take a picture
     //-----------
     static final int MY_PERMISSIONS_REQUEST_USE_EXTERNAL = 101;
 
     private void takeImage() {
-            Log.d(TAG, "take photo chosen");
             int permissionCheck = ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if(permissionCheck == PackageManager.PERMISSION_DENIED) {
-                Log.d(TAG, "permission denied, ask for permission");
                 // Here, thisActivity is the current activity
                 if (ContextCompat.checkSelfPermission(CreateNewLibraryActivity.this,
                         android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -434,7 +434,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     }
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    String photoFileName = "tinyLibraryTest.jpg";   //will overwrite previous picture in gallery at the moment, need to create dynamic name
+    String photoFileName = "tinyLibraryPhoto.jpg";   //will overwrite previous picture in gallery at the moment, could create dynamic name?
     Uri newPhotoUri = null;
 
     public void dispatchTakePictureIntent() {
@@ -449,8 +449,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -499,7 +497,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
     private void createLibrary() {
         Log.d(TAG, "createLibrary()");
-
         //for now, upload photo to api
         final CloudinaryService cloudinaryService = new CloudinaryService();
 
@@ -526,7 +523,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                     jsonData = response.body().string();
                     //TODO: check that jsonData saved correctly before saving to firebase
 
-                    saveLibraryToFirebase();
+                    saveLibraryToFirebase("https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png");
 
                     Intent intent = new Intent(CreateNewLibraryActivity.this, SearchResultsActivity.class);
                     intent.putExtra("zipCode", mZipCodeInput.getText().toString());
@@ -546,75 +543,33 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         //instead, as a placeholder, call new activity and pass url, to see url loaded from internet url
     }
 
-    private void saveLibraryToFirebase() {
-        //works to upload library, save as reference
-//        mLibraryReference = FirebaseDatabase
-//                .getInstance()
-//                .getReference()
-//                .child(Constants.FIREBASE_CHILD_LIBRARIES);
-//
-//        int charterNumber = Integer.parseInt(mCharterInput.getText().toString());
-//        int zipCode = Integer.parseInt(mZipCodeInput.getText().toString());
-//        double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
-//        double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
-//        String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png";
-//        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, imageUrl);
-//
-//        mLibraryReference.push().setValue(newLibrary);
+    private void saveLibraryToFirebase(String imageUrl) {
 
+        //create library object
+        int charterNumber = Integer.parseInt(mCharterInput.getText().toString());
+        String address = mAddressInput.getText().toString();
+        int zipCode = Integer.parseInt(mZipCodeInput.getText().toString());
+        double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
+        double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
+        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, address, imageUrl);
+
+        //push object to firebase
         mLibraryReference = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child(Constants.FIREBASE_CHILD_LIBRARIES);
-
-        int charterNumber = Integer.parseInt(mCharterInput.getText().toString());
-        int zipCode = Integer.parseInt(mZipCodeInput.getText().toString());
-        double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
-        double longitude = Double.parseDouble(mLongitudeInput.getText().toString());
-        String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png";
-        String address = getAddressFromCoordinates(this, latitude, longitude);
-
-        Library newLibrary = new Library(charterNumber, zipCode, latitude, longitude, address, imageUrl);
-
         DatabaseReference pushRef = mLibraryReference.push();
         String pushId = pushRef.getKey();
         newLibrary.setPushId(pushId);
         pushRef.setValue(newLibrary);
 
+        //push unique id into proper zip code for searching
         mZipCodeReference = FirebaseDatabase
                 .getInstance()
                 .getReference(Constants.FIREBASE_CHILD_ZIPCODES)
                 .child(String.valueOf(zipCode));
-
         mZipCodeReference.push().setValue(pushId);
 
-        //TODO: Add funcionality to check if charterNumber already exists (another database reference)
-    }
-
-    private String getAddressFromCoordinates(Context context, double latitude, double longitude) {
-        String address = "";
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-            if (addresses != null) {
-                Address returnedAddress = addresses.get(0);
-                StringBuilder strReturnedAddress = new StringBuilder();
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-                }
-                address = strReturnedAddress.toString();
-            }
-            else {
-//                address = "no address";
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            address = "could not get address";
-        }
-
-        return address;
+        //TODO: create reference for geofire searching
     }
 }
