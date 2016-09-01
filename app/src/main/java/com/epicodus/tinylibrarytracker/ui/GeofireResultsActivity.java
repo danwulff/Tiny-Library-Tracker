@@ -50,6 +50,7 @@ import butterknife.ButterKnife;
 public class GeofireResultsActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
     public static final String TAG = CreateNewLibraryActivity.class.getSimpleName();
 
+    @Bind(R.id.createNewButton) Button mCreateNewButton;
     @Bind(R.id.listRecyclerView) RecyclerView mLibraryList;
     @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.resultQuantity) TextView mResultsQuantity;
@@ -71,6 +72,8 @@ public class GeofireResultsActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         ButterKnife.bind(this);
+
+        mCreateNewButton.setVisibility(View.INVISIBLE);
 
         createAuthProgressDialog();
         mAuthProgressDialog.show();
@@ -127,6 +130,8 @@ public class GeofireResultsActivity extends AppCompatActivity implements View.On
                 System.out.println("All initial data has been loaded and events have been fired!");
                 if (libraryIds.size() != 0) {
                     displayLibraries(libraryIds);
+                } else {
+                    mAuthProgressDialog.hide();
                 }
             }
 
