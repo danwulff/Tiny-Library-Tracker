@@ -78,7 +78,12 @@ public class LibraryListAdapter extends RecyclerView.Adapter<LibraryListAdapter.
                     .into(mLibraryImageView);
 
             mLibraryAddress.setText(library.getAddress());
-            mLibraryCharterNumber.setText("Charter#: " + String.valueOf(library.getCharterNumber()));
+            int charterNumber = library.getCharterNumber();
+            if (charterNumber != -1) {
+                mLibraryCharterNumber.setText("Charter#: " + String.valueOf(charterNumber));
+            } else {
+                mLibraryCharterNumber.setText("");
+            }
         }
 
         @Override

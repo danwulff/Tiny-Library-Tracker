@@ -342,10 +342,8 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
         if (mLastLocation != null) {
             //done getting location
             mGoogleApiClient.disconnect();
-            Toast.makeText(this, "Last Latitude: " + String.valueOf(mLastLocation.getLatitude()) + "Last Longitude: " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
-
+            //get address at that location
             Geocoder geocoder = new Geocoder(CreateNewLibraryActivity.this, Locale.getDefault());
-
             try {
                 List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
 
@@ -360,7 +358,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -496,7 +493,14 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     //--------------
 
     private void createLibrary() {
-        Log.d(TAG, "createLibrary()");
+
+        saveLibraryToFirebase("https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png");
+
+        Intent intent = new Intent(CreateNewLibraryActivity.this, SearchResultsActivity.class);
+        intent.putExtra("zipCode", mZipCodeInput.getText().toString());
+        startActivity(intent);
+
+        /*Log.d(TAG, "createLibrary()");
         //for now, upload photo to api
         final CloudinaryService cloudinaryService = new CloudinaryService();
 
@@ -536,7 +540,7 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
                 Log.d(TAG + "onResponse ", jsonData);
             }
-        });
+        });*/
 
 
         //eventually publish library object to firebase with photo URL from API call,
@@ -545,8 +549,15 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
 
     private void saveLibraryToFirebase(String imageUrl) {
 
+        int charterNumber;
+
         //create library object
-        int charterNumber = Integer.parseInt(mCharterInput.getText().toString());
+        String charterString = mCharterInput.getText().toString();
+        if(!TextUtils.isEmpty(charterString)) {
+            charterNumber = Integer.parseInt(mCharterInput.getText().toString());
+        } else {
+            charterNumber = -1;
+        }
         String address = mAddressInput.getText().toString();
         int zipCode = Integer.parseInt(mZipCodeInput.getText().toString());
         double latitude = Double.parseDouble(mLatitudeInput.getText().toString());
