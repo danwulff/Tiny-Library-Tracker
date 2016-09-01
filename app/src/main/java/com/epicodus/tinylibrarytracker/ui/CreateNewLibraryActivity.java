@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -185,7 +186,16 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             }
             else {
                 mAuthProgressDialog.show();
-                createLibrary();
+
+                //stupid fix to allow progress dialog, photo upload api is blocking
+                //move to proper thread
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        createLibrary();
+                    }
+                }, 250);
             }
         }
     }
