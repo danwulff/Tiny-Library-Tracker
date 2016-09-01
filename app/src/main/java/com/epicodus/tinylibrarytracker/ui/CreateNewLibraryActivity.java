@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -38,6 +39,7 @@ import com.epicodus.tinylibrarytracker.Constants;
 import com.epicodus.tinylibrarytracker.R;
 import com.epicodus.tinylibrarytracker.models.Library;
 import com.epicodus.tinylibrarytracker.services.CloudinaryService;
+import com.epicodus.tinylibrarytracker.services.CloudinaryServicev2;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -184,7 +186,6 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
             else {
                 mAuthProgressDialog.show();
                 createLibrary();
-                mAuthProgressDialog.hide();
             }
         }
     }
@@ -493,12 +494,39 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
     //--------------
 
     private void createLibrary() {
+        //allow thread for image upload
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-        saveLibraryToFirebase("https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png");
+        CloudinaryServicev2 uploadService = new CloudinaryServicev2();
+        String url = uploadService.uploadPhoto(newPhotoUri);
 
-        Intent intent = new Intent(CreateNewLibraryActivity.this, SearchResultsActivity.class);
-        intent.putExtra("zipCode", mZipCodeInput.getText().toString());
-        startActivity(intent);
+        if(url == null) {
+            //alert user to none address
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNewLibraryActivity.this);
+            builder.setMessage("Library failed to upload");
+            builder.setCancelable(true);
+
+            builder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mLocationSpinner.setSelection(0);
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog failedLibraryCreation = builder.create();
+            failedLibraryCreation.show();
+            return;
+        } else {
+            saveLibraryToFirebase(url);
+
+            Intent intent = new Intent(CreateNewLibraryActivity.this, SearchResultsActivity.class);
+            intent.putExtra("zipCode", mZipCodeInput.getText().toString());
+            startActivity(intent);
+        }
+
+
 
         /*Log.d(TAG, "createLibrary()");
         //for now, upload photo to api
@@ -580,6 +608,8 @@ public class CreateNewLibraryActivity extends AppCompatActivity implements View.
                 .getReference(Constants.FIREBASE_CHILD_ZIPCODES)
                 .child(String.valueOf(zipCode));
         mZipCodeReference.push().setValue(pushId);
+
+        mAuthProgressDialog.hide();
 
         //TODO: create reference for geofire searching
     }
